@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kuru — portofolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07070c; --panel:#101018; --line:#23233a;
+  --ink:#eceaf6; --mut:#8f8ba6;
+  --acc:#9d8bff; --acc2:#ff8bd0;           /* ungu-biru Zeta + magenta, neon ala guns.lol */
+  --glow:0 0 24px rgba(157,139,255,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scrollbar-color:var(--line) var(--bg)}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Space Grotesk",system-ui,sans-serif;
+  min-height:100vh; overflow-x:hidden;
+}
+::selection{background:var(--acc);color:#0a0a12}
+
+/* ---- splash ---- */
+#splash{
+  position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center;
+  background:rgba(7,7,12,.92); backdrop-filter:blur(14px); cursor:pointer;
+  transition:opacity .7s ease, visibility .7s;
+}
+#splash.off{opacity:0; visibility:hidden}
+#splash span{
+  font-family:"JetBrains Mono",monospace; font-size:.95rem; letter-spacing:.35em;
+  color:var(--mut); text-transform:uppercase; animation:pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse{50%{opacity:.35}}
+
+/* ---- partikel ---- */
+#fx{position:fixed; inset:0; z-index:0; pointer-events:none}
+
+/* ---- layout ---- */
+main{
+  position:relative; z-index:1; max-width:660px; margin:0 auto;
+  padding:14vh 24px 96px; opacity:0; transform:translateY(14px);
+  transition:opacity .9s ease .15s, transform .9s ease .15s;
+}
+body.in main{opacity:1; transform:none}
+
+/* ---- hero ---- */
+.avatar{
+  width:112px; height:112px; margin:0 auto 22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:44px; font-weight:700; color:#0a0a12;
+  background:conic-gradient(from 180deg, var(--acc), var(--acc2), var(--acc));
+  box-shadow:var(--glow); position:relative;
+}
+.avatar::after{
+  content:""; position:absolute; inset:-6px; border-radius:50%;
+  border:1px solid rgba(157,139,255,.4); animation:ring 3s linear infinite;
+}
+@keyframes ring{to{transform:rotate(360deg); opacity:.2}}
+h1{
+  text-align:center; font-size:clamp(2rem,6vw,2.9rem); font-weight:700; letter-spacing:-.02em;
+  background:linear-gradient(90deg,var(--acc),var(--acc2)); -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.type-wrap{text-align:center; min-height:1.6em; margin-top:10px}
+#type{
+  font-family:"JetBrains Mono",monospace; font-size:.95rem; color:var(--mut);
+}
+#type::after{content:"▌"; color:var(--acc); animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.chips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:20px}
+.chip{
+  font-family:"JetBrains Mono",monospace; font-size:.72rem; padding:5px 12px;
+  border:1px solid var(--line); border-radius:999px; color:var(--mut);
+}
+.chip.on{border-color:rgba(157,139,255,.5); color:var(--acc)}
+
+/* ---- section ---- */
+section{margin-top:64px}
+h2{
+  font-family:"JetBrains Mono",monospace; font-size:.75rem; letter-spacing:.3em;
+  text-transform:uppercase; color:var(--acc); margin-bottom:18px;
+}
+p.bio{color:var(--mut); line-height:1.75; font-size:.98rem}
+p.bio b{color:var(--ink); font-weight:500}
+
+.proj{
+  border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin-bottom:14px;
+  background:linear-gradient(160deg, rgba(157,139,255,.05), transparent 55%), var(--panel);
+  transition:border-color .25s, box-shadow .25s, transform .25s;
+}
+.proj:hover{border-color:rgba(157,139,255,.55); box-shadow:var(--glow); transform:translateY(-2px)}
+.proj header{display:flex; align-items:baseline; justify-content:space-between; gap:12px}
+.proj h3{font-size:1.08rem; font-weight:600}
+.proj .ver{font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--acc)}
+.proj p{color:var(--mut); line-height:1.65; font-size:.88rem; margin-top:8px}
+.tags{display:flex; flex-wrap:wrap; gap:7px; margin-top:14px}
+.tags i{font-style:normal; font-family:"JetBrains Mono",monospace; font-size:.68rem; padding:3px 10px; border-radius:999px; background:rgba(157,139,255,.09); color:#bdb3ff}
+
+/* ---- links ---- */
+.links{display:flex; gap:14px; justify-content:center; margin-top:56px}
+.links a{
+  width:46px; height:46px; border:1px solid var(--line); border-radius:12px;
+  display:flex; align-items:center; justify-content:center; color:var(--mut);
+  transition:all .25s;
+}
+.links a:hover{color:var(--acc); border-color:var(--acc); box-shadow:var(--glow); transform:translateY(-3px)}
+.links svg{width:20px; height:20px; fill:currentColor}
+footer{text-align:center; margin-top:48px; font-family:"JetBrains Mono",monospace; font-size:.7rem; color:#55516b}
+
+/* ---- musik ---- */
+#audio-pill{
+  position:fixed; right:18px; bottom:18px; z-index:40;
+  display:flex; align-items:center; gap:10px; padding:10px 16px;
+  border:1px solid var(--line); border-radius:999px; background:rgba(16,16,24,.85);
+  backdrop-filter:blur(8px); font-family:"JetBrains Mono",monospace; font-size:.72rem; color:var(--mut);
+  opacity:0; transition:opacity .6s .8s; cursor:pointer; user-select:none;
+}
+body.in #audio-pill{opacity:1}
+#audio-pill:hover{border-color:var(--acc); color:var(--acc)}
+#audio-pill.dead{cursor:not-allowed; opacity:.4!important}
+.eq{display:inline-flex; gap:2px; align-items:flex-end; height:12px}
+.eq b{width:3px; background:var(--acc); height:30%; border-radius:1px}
+.playing .eq b{animation:eq .7s ease-in-out infinite alternate}
+.playing .eq b:nth-child(2){animation-delay:.15s}
+.playing .eq b:nth-child(3){animation-delay:.3s}
+@keyframes eq{from{height:20%}to{height:100%}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important; transition:none!important}
+}
+img.avatar{object-fit:cover}
+</style>
+</head>
+<body>
+
+<div id="splash"><span>click to enter...</span></div>
+<canvas id="fx"></canvas>
+
+<main>
+  <!-- ponytail: ganti foto profil cukup tukar file kuru.gif di folder yang sama -->
+  <img class="avatar" src="kuru.gif" alt="foto profil kuru">
+  <h1>kuru</h1>
+  <div class="type-wrap"><span id="type"></span></div>
+  <div class="chips">
+    <span class="chip on">minecraft plugin dev</span>
+    <span class="chip">java</span>
+    <span class="chip">paper · folia</span>
+    <span class="chip">anime enjoyer</span>
+  </div>
+
+  <section>
+    <h2>// tentang</h2>
+    <p class="bio">
+      Dev plugin <b>Minecraft</b> — ARTIS: 100% no AI,
+      DEVLOPER SERVER, Programer. Kalau lagi nggak ngoding,
+      kemungkinan besar nonton <b>Anime</b> atau <b.>Game</b>,
+      atau sibuk jadi suami nya <b>Vestia Zeta</b> 💙
+    </p>
+  </section>
+
+  <section>
+    <h2>// proyek</h2>
+
+    <article class="proj">
+      <header><h3>senyawa_modif</h3><span class="ver">v1.0.0 · Paper 1.21.8</span></header>
+      <p>Tweak pack server: villager restock otomatis tanpa cooldown, damage TNT/TNT minecart
+      dan Mace di-cap 8 hati dalam semua aspek (smash, enchant, penumpukan lintas tick),
+      konfigurasi dipisah 3 file YAML + reload tanpa restart.</p>
+      <div class="tags"><i>java</i><i>paper api</i><i>folia-supported</i><i>rcon-tested</i></div>
+    </article>
+
+    <article class="proj">
+      <header><h3>MoneySMP</h3><span class="ver">v1.0.0 · Paper + Folia</span></header>
+      <p>Ekonomi lengkap untuk SMP: money per-player berbasis JSON, sistem tim khusus admin,
+      saldo tampil di below-name scoreboard, kill antar-tim ada penalti &amp; reward,
+      plus mini-game Battle Royale / Gladiator / FFA Team.</p>
+      <div class="tags"><i>java</i><i>ekonomi</i><i>scoreboard</i><i>mini-game</i></div>
+    </article>
+  </section>
+
+  <nav class="links">
+    <a id="lnk-discord" role="button" tabindex="0" aria-label="Discord" title="Discord: himmell_ — klik untuk salin">
+      <svg viewBox="0 0 24 24"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.5a13.3 13.3 0 0 1 4 2A15 15 0 0 0 12 4a15 15 0 0 0-7.2 1.5 13.3 13.3 0 0 1 4-2L8.6 3a19.8 19.8 0 0 0-4.9 1.5A20.3 20.3 0 0 0 .2 18.1a19.9 19.9 0 0 0 6 3l.5-.7a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.4 0l.5.4a12.9 12.9 0 0 1-2 1l.5.7a19.9 19.9 0 0 0 6-3A20.3 20.3 0 0 0 20.3 4.4ZM8.7 15.3c-1.2 0-2.1-1-2.1-2.3s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.2-.9 2.3-2.1 2.3Zm6.6 0c-1.2 0-2.1-1-2.1-2.3s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.2-.9 2.3-2.1 2.3Z"/></svg>
+    </a>
+    <a href="https://github.com/rakhakaindra83-hub" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17.2 4.9 18.2 5.2 18.2 5.2c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+    </a>
+    <a href="https://open.spotify.com/user/31r5ghskjc4qnq53a5sdmipul5cm" target="_blank" rel="noopener" aria-label="Spotify" title="Spotify">
+      <svg viewBox="0 0 24 24"><path d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24Zm5.5 17.3a.75.75 0 0 1-1 .25c-2.8-1.7-6.4-2.1-10.6-1.1a.75.75 0 1 1-.33-1.47c4.6-1 8.5-.57 11.7 1.32.35.2.46.66.25 1Zm1.47-3.27a.94.94 0 0 1-1.29.3c-3.23-2-8.16-2.57-11.98-1.4a.94.94 0 1 1-.54-1.8c4.36-1.32 9.78-.68 13.5 1.6.45.28.58.86.3 1.3Zm.13-3.4C15.3 8.35 8.9 8.14 5.2 9.26a1.12 1.12 0 1 1-.65-2.15c4.25-1.29 11.3-1.04 15.75 1.6a1.12 1.12 0 1 1-1.15 1.93Z"/></svg>
+    </a>
+  </nav>
+
+  <footer>© 2026 kuru — dibuat dengan satu file html</footer>
+</main>
+
+<!-- ponytail: musik baca bgm.wav dari folder yang sama; kalau mau streaming/hosting, isi src penuh -->
+<audio id="bgm" src="bgm.wav" loop preload="none"></audio>
+<div id="audio-pill" title="putar musik"><span class="eq"><b></b><b></b><b></b></span><span id="pill-label">lofi — klik utk play</span></div>
+
+<script>
+// ---- splash: masuk + mulai musik (gesture pertama = boleh autoplay) ----
+const splash=document.getElementById('splash');
+splash.addEventListener('click',()=>{
+  document.body.classList.add('in'); splash.classList.add('off'); tryPlay();
+},{once:true});
+
+// ---- efek ketik ----
+const LINES=['minecraft plugin developer','paper · spigot · folia','violet evergarden ✦ k-on!','suami nya vestia zeta 💙'];
+const typeEl=document.getElementById('type');
+if(matchMedia('(prefers-reduced-motion: reduce)').matches){
+  typeEl.textContent=LINES[0];
+}else{
+  let li=0,ci=0,del=false;
+  (function tick(){
+    const s=LINES[li];
+    typeEl.textContent=s.slice(0,ci);
+    if(!del&&ci<s.length){ci++; setTimeout(tick,55);}
+    else if(!del){del=true; setTimeout(tick,1700);}
+    else if(ci>0){ci--; setTimeout(tick,28);}
+    else{del=false; li=(li+1)%LINES.length; setTimeout(tick,350);}
+  })();
+}
+
+// ---- partikel ----
+const cv=document.getElementById('fx'),cx=cv.getContext('2d');
+let W,H,P=[];const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;}
+size();addEventListener('resize',size);
+const N=Math.min(70,innerWidth/18|0);
+for(let i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.4,v:Math.random()*.35+.08,a:Math.random()});
+(function draw(){
+  cx.clearRect(0,0,W,H);
+  for(const p of P){
+    p.y-=p.v;p.a+=.01;if(p.y<-4){p.y=H+4;p.x=Math.random()*W;}
+    cx.globalAlpha=.25+Math.abs(Math.sin(p.a))*.4;
+    cx.fillStyle=Math.sin(p.a*1.3)>0?'#9d8bff':'#ff8bd0';
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill();
+  }
+  cx.globalAlpha=1;
+  if(!RM)requestAnimationFrame(draw);
+})();
+
+// ---- musik ----
+const bgm=document.getElementById('bgm'),pill=document.getElementById('audio-pill'),lbl=document.getElementById('pill-label');
+function tryPlay(){
+  bgm.volume=.35;
+  bgm.play().then(()=>{pill.classList.add('playing');lbl.textContent='lofi — playing';})
+  .catch(()=>{lbl.textContent='letakkan bgm.wav di samping file ini';});
+}
+pill.addEventListener('click',()=>{
+  if(bgm.paused){tryPlay();}
+  else{bgm.pause();pill.classList.remove('playing');lbl.textContent='lofi — paused';}
+});
+// ---- discord: klik = salin username ----
+const dc=document.getElementById('lnk-discord');
+function copyDc(){
+  const done=()=>{const t=dc.title;dc.title='himmell_ tersalin!';setTimeout(()=>dc.title=t,1600);};
+  if(navigator.clipboard&&isSecureContext){navigator.clipboard.writeText('himmell_').then(done);}
+  else{const i=document.createElement('input');i.value='himmell_';document.body.appendChild(i);i.select();document.execCommand('copy');i.remove();done();}
+}
+dc.addEventListener('click',copyDc);
+dc.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();copyDc();}});
+
+bgm.addEventListener('error',()=>{pill.classList.add('dead');lbl.textContent='bgm.wav tidak ditemukan';});
+</script>
+</body>
+</html>
