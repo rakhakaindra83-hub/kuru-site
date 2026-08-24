@@ -256,11 +256,18 @@ pill.addEventListener('click',()=>{
 });
 // ---- discord: klik = salin username ----
 const dc=document.getElementById('lnk-discord');
+let toast;
 function copyDc(){
-  const done=()=>{const t=dc.title;dc.title='himmell_ tersalin!';setTimeout(()=>dc.title=t,1600);};
-  if(navigator.clipboard&&isSecureContext){navigator.clipboard.writeText('himmell_').then(done);}
-  else{const i=document.createElement('input');i.value='himmell_';document.body.appendChild(i);i.select();document.execCommand('copy');i.remove();done();}
+  const done=()=>{
+    // ponytail: toast dibuat runtime, cukup untuk satu pesan
+    if(!toast){toast=document.createElement('div');toast.style.cssText='position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#161624;color:#dcd2ff;border:1px solid #9d8bff66;padding:8px 16px;border-radius:999px;font-size:.85rem;z-index:60;opacity:0;transition:opacity .25s;pointer-events:none';document.body.appendChild(toast);}
+    toast.textContent='Discord: himmell_ tersalin ✓';toast.style.opacity=1;
+    clearTimeout(toast._t);toast._t=setTimeout(()=>toast.style.opacity=0,1800);
+  };
+  if(navigator.clipboard&&isSecureContext){navigator.clipboard.writeText('himmell_').then(done).catch(()=>{fallbackCopy();done();});}
+  else{fallbackCopy();done();}
 }
+function fallbackCopy(){const i=document.createElement('textarea');i.value='himmell_';i.style.position='fixed';i.style.opacity=0;document.body.appendChild(i);i.select();try{document.execCommand('copy');}catch(e){}i.remove();}
 dc.addEventListener('click',copyDc);
 dc.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();copyDc();}});
 
