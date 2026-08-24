@@ -99,6 +99,27 @@ p.bio b{color:var(--ink); font-weight:500}
 .tags{display:flex; flex-wrap:wrap; gap:7px; margin-top:14px}
 .tags i{font-style:normal; font-family:"JetBrains Mono",monospace; font-size:.68rem; padding:3px 10px; border-radius:999px; background:rgba(157,139,255,.09); color:#bdb3ff}
 
+/* ---- skills ---- */
+.skill{margin-bottom:18px}
+.s-head{display:flex; align-items:center; gap:11px; margin-bottom:8px}
+.app{
+  width:32px; height:32px; border-radius:9px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  font-family:"JetBrains Mono",monospace; font-size:.66rem; font-weight:700;
+  color:var(--bc,#fff);
+  background:color-mix(in srgb, var(--bc,#fff) 12%, transparent);
+  border:1px solid color-mix(in srgb, var(--bc,#fff) 38%, transparent);
+}
+.s-head span{font-size:.93rem; color:var(--ink)}
+.s-head b{margin-left:auto; font-family:"JetBrains Mono",monospace; font-size:.72rem; font-weight:500; color:var(--acc)}
+.bar{height:6px; border-radius:999px; background:rgba(157,139,255,.09); overflow:hidden}
+.bar i{
+  display:block; height:100%; width:0; border-radius:inherit;
+  background:linear-gradient(90deg, var(--acc), #ff8bd0);
+  transition:width 1.2s cubic-bezier(.22,1,.36,1) .15s;
+}
+.skill.in .bar i{width:var(--p)}
+
 /* ---- links ---- */
 .links{display:flex; gap:14px; justify-content:center; margin-top:56px}
 .links a{
@@ -181,6 +202,17 @@ img.avatar{object-fit:cover}
     </article>
   </section>
 
+  <section>
+    <h2>// skills</h2>
+    <div class="skill" style="--p:80%"><div class="s-head"><i class="app" style="--bc:#f2f2f2">CC</i><span>CapCut</span><b>80%</b></div><div class="bar"><i></i></div></div>
+    <div class="skill" style="--p:70%"><div class="s-head"><i class="app" style="--bc:#7ee787">&lt;/&gt;</i><span>Coding</span><b>70%</b></div><div class="bar"><i></i></div></div>
+    <div class="skill" style="--p:90%"><div class="s-head"><i class="app" style="--bc:#35d07f">PM</i><span>Plugin Management</span><b>90%</b></div><div class="bar"><i></i></div></div>
+    <div class="skill" style="--p:80%"><div class="s-head"><i class="app" style="--bc:#56a8ff">Kr</i><span>Krita</span><b>80%</b></div><div class="bar"><i></i></div></div>
+    <div class="skill" style="--p:80%"><div class="s-head"><i class="app" style="--bc:#ff6d9d">iP</i><span>Ibis Paint</span><b>80%</b></div><div class="bar"><i></i></div></div>
+    <div class="skill" style="--p:40%"><div class="s-head"><i class="app" style="--bc:#9999ff">Pr</i><span>Adobe Premiere Pro</span><b>40%</b></div><div class="bar"><i></i></div></div>
+    <div class="skill" style="--p:20%"><div class="s-head"><i class="app" style="--bc:#cf9bff">Ae</i><span>Adobe After Effects</span><b>20%</b></div><div class="bar"><i></i></div></div>
+  </section>
+
   <nav class="links">
     <a id="lnk-discord" href="https://discord.com/users/1358345285482319892" target="_blank" rel="noopener" aria-label="Discord" title="Discord: himmell_">
       <svg viewBox="0 0 24 24"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.5a13.3 13.3 0 0 1 4 2A15 15 0 0 0 12 4a15 15 0 0 0-7.2 1.5 13.3 13.3 0 0 1 4-2L8.6 3a19.8 19.8 0 0 0-4.9 1.5A20.3 20.3 0 0 0 .2 18.1a19.9 19.9 0 0 0 6 3l.5-.7a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.4 0l.5.4a12.9 12.9 0 0 1-2 1l.5.7a19.9 19.9 0 0 0 6-3A20.3 20.3 0 0 0 20.3 4.4ZM8.7 15.3c-1.2 0-2.1-1-2.1-2.3s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.2-.9 2.3-2.1 2.3Zm6.6 0c-1.2 0-2.1-1-2.1-2.3s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.2-.9 2.3-2.1 2.3Z"/></svg>
@@ -254,6 +286,10 @@ pill.addEventListener('click',()=>{
   if(bgm.paused){tryPlay();}
   else{bgm.pause();pill.classList.remove('playing');lbl.textContent='lofi — paused';}
 });
+
+// ---- skill bars: isi saat terlihat ----
+const sk=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');sk.unobserve(e.target);}}),{threshold:.3});
+document.querySelectorAll('.skill').forEach(el=>sk.observe(el));
 
 bgm.addEventListener('error',()=>{pill.classList.add('dead');lbl.textContent='bgm.wav tidak ditemukan';});
 </script>
