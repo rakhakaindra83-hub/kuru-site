@@ -182,7 +182,7 @@ img.avatar{object-fit:cover}
   </section>
 
   <nav class="links">
-    <a id="lnk-discord" role="button" tabindex="0" aria-label="Discord" title="Discord: himmell_ — klik untuk salin">
+    <a id="lnk-discord" href="https://discord.com/users/1358345285482319892" target="_blank" rel="noopener" aria-label="Discord" title="Discord: himmell_">
       <svg viewBox="0 0 24 24"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.5a13.3 13.3 0 0 1 4 2A15 15 0 0 0 12 4a15 15 0 0 0-7.2 1.5 13.3 13.3 0 0 1 4-2L8.6 3a19.8 19.8 0 0 0-4.9 1.5A20.3 20.3 0 0 0 .2 18.1a19.9 19.9 0 0 0 6 3l.5-.7a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.4 0l.5.4a12.9 12.9 0 0 1-2 1l.5.7a19.9 19.9 0 0 0 6-3A20.3 20.3 0 0 0 20.3 4.4ZM8.7 15.3c-1.2 0-2.1-1-2.1-2.3s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.2-.9 2.3-2.1 2.3Zm6.6 0c-1.2 0-2.1-1-2.1-2.3s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.2-.9 2.3-2.1 2.3Z"/></svg>
     </a>
     <a href="https://github.com/rakhakaindra83-hub" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
@@ -254,22 +254,6 @@ pill.addEventListener('click',()=>{
   if(bgm.paused){tryPlay();}
   else{bgm.pause();pill.classList.remove('playing');lbl.textContent='lofi — paused';}
 });
-// ---- discord: klik = salin username ----
-const dc=document.getElementById('lnk-discord');
-let toast;
-function copyDc(){
-  const done=()=>{
-    // ponytail: toast dibuat runtime, cukup untuk satu pesan
-    if(!toast){toast=document.createElement('div');toast.style.cssText='position:fixed;left:50%;bottom:84px;transform:translateX(-50%);background:#161624;color:#dcd2ff;border:1px solid #9d8bff66;padding:8px 16px;border-radius:999px;font-size:.85rem;z-index:60;opacity:0;transition:opacity .25s;pointer-events:none';document.body.appendChild(toast);}
-    toast.textContent='Discord: himmell_ tersalin ✓';toast.style.opacity=1;
-    clearTimeout(toast._t);toast._t=setTimeout(()=>toast.style.opacity=0,1800);
-  };
-  if(navigator.clipboard&&isSecureContext){navigator.clipboard.writeText('himmell_').then(done).catch(()=>{fallbackCopy();done();});}
-  else{fallbackCopy();done();}
-}
-function fallbackCopy(){const i=document.createElement('textarea');i.value='himmell_';i.style.position='fixed';i.style.opacity=0;document.body.appendChild(i);i.select();try{document.execCommand('copy');}catch(e){}i.remove();}
-dc.addEventListener('click',copyDc);
-dc.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();copyDc();}});
 
 bgm.addEventListener('error',()=>{pill.classList.add('dead');lbl.textContent='bgm.wav tidak ditemukan';});
 </script>
