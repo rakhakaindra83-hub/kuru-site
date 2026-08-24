@@ -87,6 +87,29 @@ h2{
 p.bio{color:var(--mut); line-height:1.75; font-size:.98rem}
 p.bio b{color:var(--ink); font-weight:500}
 
+/* ---- widget discord ---- */
+.dc{display:flex; align-items:center; gap:14px; margin-top:22px; padding:12px 16px;
+  border:1px solid var(--line); border-radius:14px; background:var(--panel);
+  transition:border-color .25s, box-shadow .25s}
+.dc:hover{border-color:rgba(157,139,255,.55); box-shadow:var(--glow)}
+.dc-ava-wrap{position:relative; flex:none}
+.dc img{width:52px; height:52px; border-radius:50%; object-fit:cover; display:block}
+.dc-dot{position:absolute; right:-2px; bottom:-2px; width:15px; height:15px; border-radius:50%;
+  background:var(--st,#80848e); border:3px solid var(--bg); box-sizing:content-box}
+.dc-info{display:flex; flex-direction:column; gap:2px}
+.dc-name{font-weight:600; font-size:.98rem; color:var(--ink); text-decoration:none}
+.dc-name:hover{color:var(--acc)}
+.dc-sub{font-size:.8rem; color:var(--mut)}
+.dc-spot{display:flex; align-items:center; gap:12px; margin-top:10px; padding:10px 14px;
+  border:1px solid rgba(157,139,255,.35); border-radius:12px; background:rgba(157,139,255,.06);
+  animation:pulse-spot 2.4s ease-in-out infinite}
+.dc-spot[hidden]{display:none}
+.dc-spot img{width:44px; height:44px; border-radius:8px; object-fit:cover}
+.dc-spot small{display:block; font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:#1db954}
+.dc-spot b{display:block; font-size:.88rem; color:var(--ink)}
+.dc-spot span{font-size:.78rem; color:var(--mut)}
+@keyframes pulse-spot{50%{border-color:rgba(29,185,84,.55)}}
+
 .proj{
   border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin-bottom:14px;
   background:linear-gradient(160deg, rgba(157,139,255,.05), transparent 55%), var(--panel);
@@ -181,6 +204,18 @@ img.avatar{object-fit:cover}
       kemungkinan besar nonton <b>Anime</b> atau <b>Game</b>,
       atau sibuk jadi suami nya <b>Vestia Zeta</b> 💙
     </p>
+
+    <div class="dc" id="dc-card">
+      <div class="dc-ava-wrap"><img id="dc-ava" src="kuru.gif" alt="avatar discord"><i class="dc-dot" id="dc-dot" style="--st:#80848e"></i></div>
+      <div class="dc-info">
+        <a href="https://discord.com/users/1358345285482319892" target="_blank" rel="noopener" class="dc-name">himmell_</a>
+        <span class="dc-sub" id="dc-sub">Discord</span>
+      </div>
+    </div>
+    <div class="dc-spot" id="dc-spot" hidden>
+      <img id="dc-art" alt="cover lagu">
+      <div><small>sedang dengar di Spotify</small><b id="dc-song"></b><span id="dc-artist"></span></div>
+    </div>
   </section>
 
   <section>
@@ -291,6 +326,50 @@ pill.addEventListener('click',()=>{
 // ---- skill bars: isi saat terlihat ----
 const sk=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');sk.unobserve(e.target);}}),{threshold:.3});
 document.querySelectorAll('.skill').forEach(el=>sk.observe(el));
+
+// ---- discord presence live via Lanyard ----
+(function(){
+  const ID='1358345285482319892';
+  const $=id=>document.getElementById(id);
+  const dot=$('dc-dot'),sub=$('dc-sub'),ava=$('dc-ava'),spot=$('dc-spot'),
+        art=$('dc-art'),song=$('dc-song'),artist=$('dc-artist');
+  const ST={online:'#23a55a',idle:'#f0b232',dnd:'#f23f43',offline:'#80848e'};
+  const TXT={online:'online',idle:'afk / idle',dnd:'jangan ganggu',offline:'offline'};
+  let ws,hb;
+  function draw(p){
+    if(!p)return;
+    const st=p.discord_status||'offline';
+    dot.style.setProperty('--st',ST[st]||ST.offline);
+    sub.textContent=TXT[st];
+    const u=p.discord_user;
+    if(u&&u.avatar)ava.src='https://cdn.discordapp.com/avatars/'+u.id+'/'+u.avatar+'.png?size=128';
+    else if(u&&u.avatar_decoration_data){}
+    const sp=(p.activities||[]).find(a=>a.name==='Spotify');
+    if(sp&&sp.assets&&sp.assets.large_image){
+      spot.hidden=false;
+      art.src=sp.assets.large_image.startsWith('spotify:')
+        ?'https://i.scdn.co/image/'+sp.assets.large_image.slice(8):art.src;
+      song.textContent=sp.details||'';
+      artist.textContent=sp.state||'';
+    }else spot.hidden=true;
+  }
+  function conn(){
+    clearInterval(hb);
+    try{
+      ws=new WebSocket('wss://api.lanyard.rest/socket');
+      ws.onmessage=e=>{
+        const m=JSON.parse(e.data);
+        if(m.op===1){
+          hb=setInterval(()=>{if(ws.readyState===1)ws.send('{"op":3}');},(m.d&&m.d.heartbeat_interval)||30000);
+          ws.send(JSON.stringify({op:2,d:{subscribe_to_id:ID}}));
+        }else if(m.op===0&&(m.t==='INIT_STATE'||m.t==='PRESENCE_UPDATE'))draw(m.d);
+      };
+      ws.onclose=()=>setTimeout(conn,5000);
+      ws.onerror=()=>ws.close();
+    }catch(err){}
+  }
+  conn();
+})();
 
 bgm.addEventListener('error',()=>{pill.classList.add('dead');lbl.textContent='bgm.wav tidak ditemukan';});
 </script>
