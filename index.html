@@ -12,13 +12,14 @@
 :root{
   --bg:#07070c; --panel:#101018; --line:#23233a;
   --ink:#eceaf6; --mut:#8f8ba6;
-  --acc:#9d8bff; --acc2:#ff8bd0;           /* ungu-biru Zeta + magenta, neon ala guns.lol */
-  --glow:0 0 24px rgba(157,139,255,.35);
+  --acc:#5aa8ff; --acc2:#8fd0ff;           /* biru langit */
+  --glow:0 0 24px rgba(90,168,255,.35);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scrollbar-color:var(--line) var(--bg)}
 body{
-  background:var(--bg); color:var(--ink);
+  background:linear-gradient(rgba(10,22,38,.55), rgba(10,22,38,.55)), url('bg.jpg') center/cover fixed;
+  color:var(--ink);
   font-family:"Space Grotesk",system-ui,sans-serif;
   min-height:100vh; overflow-x:hidden;
 }
@@ -58,7 +59,7 @@ body.in main{opacity:1; transform:none}
 }
 .avatar::after{
   content:""; position:absolute; inset:-6px; border-radius:50%;
-  border:1px solid rgba(157,139,255,.4); animation:ring 3s linear infinite;
+  border:1px solid rgba(90,168,255,.4); animation:ring 3s linear infinite;
 }
 @keyframes ring{to{transform:rotate(360deg); opacity:.2}}
 h1{
@@ -76,7 +77,7 @@ h1{
   font-family:"JetBrains Mono",monospace; font-size:.72rem; padding:5px 12px;
   border:1px solid var(--line); border-radius:999px; color:var(--mut);
 }
-.chip.on{border-color:rgba(157,139,255,.5); color:var(--acc)}
+.chip.on{border-color:rgba(90,168,255,.5); color:var(--acc)}
 
 /* ---- section ---- */
 section{margin-top:64px}
@@ -91,7 +92,7 @@ p.bio b{color:var(--ink); font-weight:500}
 .dc{display:flex; align-items:center; gap:14px; margin-top:22px; padding:12px 16px;
   border:1px solid var(--line); border-radius:14px; background:var(--panel);
   transition:border-color .25s, box-shadow .25s}
-.dc:hover{border-color:rgba(157,139,255,.55); box-shadow:var(--glow)}
+.dc:hover{border-color:rgba(90,168,255,.55); box-shadow:var(--glow)}
 .dc-ava-wrap{position:relative; flex:none}
 .dc img{width:52px; height:52px; border-radius:50%; object-fit:cover; display:block}
 .dc-dot{position:absolute; right:-2px; bottom:-2px; width:15px; height:15px; border-radius:50%;
@@ -101,7 +102,7 @@ p.bio b{color:var(--ink); font-weight:500}
 .dc-name:hover{color:var(--acc)}
 .dc-sub{font-size:.8rem; color:var(--mut)}
 .dc-spot{display:flex; align-items:center; gap:12px; margin-top:10px; padding:10px 14px;
-  border:1px solid rgba(157,139,255,.35); border-radius:12px; background:rgba(157,139,255,.06);
+  border:1px solid rgba(90,168,255,.35); border-radius:12px; background:rgba(90,168,255,.06);
   animation:pulse-spot 2.4s ease-in-out infinite}
 .dc-spot[hidden]{display:none}
 .dc-spot img{width:44px; height:44px; border-radius:8px; object-fit:cover}
@@ -112,16 +113,16 @@ p.bio b{color:var(--ink); font-weight:500}
 
 .proj{
   border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin-bottom:14px;
-  background:linear-gradient(160deg, rgba(157,139,255,.05), transparent 55%), var(--panel);
+  background:linear-gradient(160deg, rgba(90,168,255,.05), transparent 55%), var(--panel);
   transition:border-color .25s, box-shadow .25s, transform .25s;
 }
-.proj:hover{border-color:rgba(157,139,255,.55); box-shadow:var(--glow); transform:translateY(-2px)}
+.proj:hover{border-color:rgba(90,168,255,.55); box-shadow:var(--glow); transform:translateY(-2px)}
 .proj header{display:flex; align-items:baseline; justify-content:space-between; gap:12px}
 .proj h3{font-size:1.08rem; font-weight:600}
 .proj .ver{font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--acc)}
 .proj p{color:var(--mut); line-height:1.65; font-size:.88rem; margin-top:8px}
 .tags{display:flex; flex-wrap:wrap; gap:7px; margin-top:14px}
-.tags i{font-style:normal; font-family:"JetBrains Mono",monospace; font-size:.68rem; padding:3px 10px; border-radius:999px; background:rgba(157,139,255,.09); color:#bdb3ff}
+.tags i{font-style:normal; font-family:"JetBrains Mono",monospace; font-size:.68rem; padding:3px 10px; border-radius:999px; background:rgba(90,168,255,.09); color:#9ecbff}
 
 /* ---- skills ---- */
 .skill{margin-bottom:18px}
@@ -136,10 +137,10 @@ p.bio b{color:var(--ink); font-weight:500}
 }
 .s-head span{font-size:.93rem; color:var(--ink)}
 .s-head b{margin-left:auto; font-family:"JetBrains Mono",monospace; font-size:.72rem; font-weight:500; color:var(--acc)}
-.bar{height:6px; border-radius:999px; background:rgba(157,139,255,.09); overflow:hidden}
+.bar{height:6px; border-radius:999px; background:rgba(90,168,255,.09); overflow:hidden}
 .bar i{
   display:block; height:100%; width:0; border-radius:inherit;
-  background:linear-gradient(90deg, var(--acc), #ff8bd0);
+  background:linear-gradient(90deg, var(--acc), #8fd0ff);
   transition:width 1.2s cubic-bezier(.22,1,.36,1) .15s;
 }
 .skill.in .bar i{width:var(--p)}
@@ -177,6 +178,24 @@ body.in #audio-pill{opacity:1}
   *,*::before,*::after{animation:none!important; transition:none!important}
 }
 img.avatar{object-fit:cover}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.gallery img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.gallery img:hover {
+  transform: scale(1.02);
+  box-shadow: var(--glow);
+}
 </style>
 </head>
 <body>
@@ -190,17 +209,17 @@ img.avatar{object-fit:cover}
   <h1>kuru</h1>
   <div class="type-wrap"><span id="type"></span></div>
   <div class="chips">
-    <span class="chip on">minecraft plugin dev</span>
-    <span class="chip">java</span>
-    <span class="chip">paper · folia</span>
+    <span class="chip on">developer</span>
+    <span class="chip">artist</span>
+    <span class="chip">animator</span>
     <span class="chip">anime enjoyer</span>
   </div>
 
   <section>
     <h2>// tentang</h2>
     <p class="bio">
-      Dev plugin <b>Minecraft</b> — ARTIS: 100% no AI,
-      DEVLOPER SERVER, Programer. Kalau lagi nggak ngoding,
+      Developer, Artist, Animator — 100% no AI.
+      Kalau lagi nggak ngoding,
       kemungkinan besar nonton <b>Anime</b> atau <b>Game</b>,
       atau sibuk jadi suami nya <b>Vestia Zeta</b> 💙
     </p>
@@ -219,38 +238,31 @@ img.avatar{object-fit:cover}
   </section>
 
   <section>
-    <h2>// proyek</h2>
-
-    <article class="proj">
-      <header><h3>MoneySMP</h3><span class="ver">v1.0.0 · Paper + Folia</span></header>
-      <p>Ekonomi lengkap untuk SMP: money per-player berbasis JSON, sistem tim khusus admin,
-      saldo tampil di below-name scoreboard, kill antar-tim ada penalti &amp; reward,
-      plus mini-game Battle Royale / Gladiator / FFA Team.</p>
-      <div class="tags"><i>java</i><i>ekonomi</i><i>scoreboard</i><i>mini-game</i></div>
-    </article>
-    <article class="proj">
-      <header><h3>Dream Stalker</h3><span class="ver">v1.0.0 · Fabric 1.21.8</span></header>
-      <p>Mod horor: entitas Stalker yang mematung saat dilihat dan teleport mendekat
-      diam-diam saat tidak, meteran fear per pemain dengan detak jantung, jumpscare
-      Darkness + suara bisikan yang disintesis sendiri.</p>
-      <div class="tags"><i>java</i><i>fabric api</i><i>horror ai</i><i>ogg synth</i></div>
-    </article>
-    <article class="proj">
-      <header><h3>SusSMP</h3><span class="ver">v1.9.0 · Paper/Spigot 1.21+</span></header>
-      <p>Plugin social deduction ala Among Us untuk 10 pemain: role acak IMPOSTOR vs
-      INNOCENT, task 15 altar (3 item random per altar) dengan reward Ender Eye dan
-      bos final Ender Dragon, emergency bell, voting via chat atau GUI kepala pemain
-      (/vote), plus Impostor Compass locator (bossbar 30 dtk / cooldown 60 dtk) dan
-      bossbar task progress khusus impostor.</p>
-      <div class="tags"><i>java</i><i>paper api</i><i>mini-game</i><i>social deduction</i></div>
-    </article>
+    <h2>// karya</h2>
+    <div class="gallery">
+      <img src="images/img1.png" alt="karya 1" loading="lazy">
+      <img src="images/img2.png" alt="karya 2" loading="lazy">
+      <img src="images/img3.png" alt="karya 3" loading="lazy">
+      <img src="images/img4.png" alt="karya 4" loading="lazy">
+      <img src="images/img5.png" alt="karya 5" loading="lazy">
+      <img src="images/img6.png" alt="karya 6" loading="lazy">
+      <img src="images/img7.png" alt="karya 7" loading="lazy">
+      <img src="images/img8.png" alt="karya 8" loading="lazy">
+      <img src="images/img9.png" alt="karya 9" loading="lazy">
+      <img src="images/img10.jpg" alt="karya 10" loading="lazy">
+      <img src="images/img11.jpg" alt="karya 11" loading="lazy">
+      <img src="images/img12.jpg" alt="karya 12" loading="lazy">
+      <img src="images/img13.png" alt="karya 13" loading="lazy">
+      <img src="images/img14.png" alt="karya 14" loading="lazy">
+      <img src="images/img15.jpg" alt="karya 15" loading="lazy">
+    </div>
   </section>
 
   <section>
     <h2>// skills</h2>
     <div class="skill" style="--p:80%"><div class="s-head"><i class="app" style="--bc:#f2f2f2">CC</i><span>CapCut</span><b>80%</b></div><div class="bar"><i></i></div></div>
     <div class="skill" style="--p:70%"><div class="s-head"><i class="app" style="--bc:#7ee787">&lt;/&gt;</i><span>Coding</span><b>70%</b></div><div class="bar"><i></i></div></div>
-    <div class="skill" style="--p:90%"><div class="s-head"><i class="app" style="--bc:#35d07f">PM</i><span>Plugin Management</span><b>90%</b></div><div class="bar"><i></i></div></div>
+    <div class="skill" style="--p:90%"><div class="s-head"><i class="app" style="--bc:#35d07f">PM</i><span>Project Management</span><b>90%</b></div><div class="bar"><i></i></div></div>
     <div class="skill" style="--p:80%"><div class="s-head"><i class="app" style="--bc:#56a8ff">Kr</i><span>Krita</span><b>80%</b></div><div class="bar"><i></i></div></div>
     <div class="skill" style="--p:80%"><div class="s-head"><i class="app" style="--bc:#ff6d9d">iP</i><span>Ibis Paint</span><b>80%</b></div><div class="bar"><i></i></div></div>
     <div class="skill" style="--p:40%"><div class="s-head"><i class="app" style="--bc:#9999ff">Pr</i><span>Adobe Premiere Pro</span><b>40%</b></div><div class="bar"><i></i></div></div>
@@ -284,7 +296,7 @@ splash.addEventListener('click',()=>{
 },{once:true});
 
 // ---- efek ketik ----
-const LINES=['minecraft plugin developer','paper · spigot · folia','violet evergarden ✦ k-on!','suami nya vestia zeta 💙'];
+const LINES=['developer','artist','animator','suami nya vestia zeta 💙'];
 const typeEl=document.getElementById('type');
 if(matchMedia('(prefers-reduced-motion: reduce)').matches){
   typeEl.textContent=LINES[0];
