@@ -292,7 +292,7 @@ img.avatar{object-fit:cover}
 
 <!-- ponytail: video bg dari bg.mp4 (muted loop); backsound bgm.m4a nyala setelah klik splash -->
 <audio id="bgm" src="bgm.m4a" loop preload="none"></audio>
-<div id="audio-pill" title="putar musik"><span class="eq"><b></b><b></b><b></b></span><span id="pill-label">lofi — klik utk play</span></div>
+<div id="audio-pill" title="putar musik"><span class="eq"><b></b><b></b><b></b></span><span id="pill-label">I CAN'T STOP THE LONELINESS — klik utk play</span></div>
 
 <script>
 // ---- splash: masuk + mulai musik (gesture pertama = boleh autoplay) ----
@@ -354,12 +354,12 @@ for(let i=0;i<N;i++)P.push({
 const bgm=document.getElementById('bgm'),pill=document.getElementById('audio-pill'),lbl=document.getElementById('pill-label');
 function tryPlay(){
   bgm.volume=.35;
-  bgm.play().then(()=>{pill.classList.add('playing');lbl.textContent='lofi — playing';})
+  bgm.play().then(()=>{pill.classList.add('playing');lbl.textContent="I CAN'T STOP THE LONELINESS — playing";})
   .catch(()=>{lbl.textContent='letakkan bgm.m4a di samping file ini';});
 }
 pill.addEventListener('click',()=>{
   if(bgm.paused){tryPlay();}
-  else{bgm.pause();pill.classList.remove('playing');lbl.textContent='lofi — paused';}
+  else{bgm.pause();pill.classList.remove('playing');lbl.textContent="I CAN'T STOP THE LONELINESS — paused";}
 });
 
 // ---- skill bars: isi saat terlihat ----
