@@ -18,11 +18,14 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scrollbar-color:var(--line) var(--bg)}
 body{
-  background:linear-gradient(rgba(10,22,38,.55), rgba(10,22,38,.55)), url('bg.jpg') center/cover fixed;
+  background:var(--bg);
   color:var(--ink);
   font-family:"Space Grotesk",system-ui,sans-serif;
   min-height:100vh; overflow-x:hidden;
 }
+#bg-video{position:fixed; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2}
+#bg-shade{position:fixed; inset:0; z-index:-1;
+  background:linear-gradient(rgba(10,22,38,.55), rgba(10,22,38,.55))}
 ::selection{background:var(--acc);color:#0a0a12}
 
 /* ---- splash ---- */
@@ -200,6 +203,9 @@ img.avatar{object-fit:cover}
 </head>
 <body>
 
+<video id="bg-video" src="bg.mp4" autoplay muted loop playsinline></video>
+<div id="bg-shade"></div>
+
 <div id="splash"><span>click to enter...</span></div>
 <canvas id="fx"></canvas>
 
@@ -284,8 +290,8 @@ img.avatar{object-fit:cover}
   <footer>© 2026 kuru — Anime Lover</footer>
 </main>
 
-<!-- ponytail: musik baca bgm.wav dari folder yang sama; kalau mau streaming/hosting, isi src penuh -->
-<audio id="bgm" src="bgm.wav" loop preload="none"></audio>
+<!-- ponytail: video bg dari bg.mp4 (muted loop); backsound bgm.m4a nyala setelah klik splash -->
+<audio id="bgm" src="bgm.m4a" loop preload="none"></audio>
 <div id="audio-pill" title="putar musik"><span class="eq"><b></b><b></b><b></b></span><span id="pill-label">lofi — klik utk play</span></div>
 
 <script>
@@ -349,7 +355,7 @@ const bgm=document.getElementById('bgm'),pill=document.getElementById('audio-pil
 function tryPlay(){
   bgm.volume=.35;
   bgm.play().then(()=>{pill.classList.add('playing');lbl.textContent='lofi — playing';})
-  .catch(()=>{lbl.textContent='letakkan bgm.wav di samping file ini';});
+  .catch(()=>{lbl.textContent='letakkan bgm.m4a di samping file ini';});
 }
 pill.addEventListener('click',()=>{
   if(bgm.paused){tryPlay();}
@@ -404,7 +410,7 @@ document.querySelectorAll('.skill').forEach(el=>sk.observe(el));
   conn();
 })();
 
-bgm.addEventListener('error',()=>{pill.classList.add('dead');lbl.textContent='bgm.wav tidak ditemukan';});
+bgm.addEventListener('error',()=>{pill.classList.add('dead');lbl.textContent='bgm.m4a tidak ditemukan';});
 </script>
 </body>
 </html>
