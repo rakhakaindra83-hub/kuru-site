@@ -238,6 +238,7 @@ img.avatar{object-fit:cover}
 .plugin-icon.impostor{color:#ff8e9e;background:rgba(220,55,75,.16);border:1px solid #dc374b}
 .plugin-icon.coin{font-family:system-ui;font-size:1.35rem;background:rgba(255,193,7,.14);border:1px solid #dcae25}
 .plugin-icon.compound{color:#fff;background:#b52235;border:1px solid #ff5368;border-radius:50%;font-size:.95rem;box-shadow:0 0 12px rgba(255,55,80,.3)}
+img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 </style>
 </head>
 <body>
@@ -295,11 +296,11 @@ img.avatar{object-fit:cover}
     </div>
     <div id="dev-panel" class="special-panel" role="tabpanel" hidden>
       <div class="plugin-list">
-        <button type="button" class="plugin-button"><span class="plugin-icon shield">AC</span><span>anticlean-plugin</span></button>
-        <button type="button" class="plugin-button"><span class="plugin-icon terrain">FL</span><span>farlands-plugin</span></button>
-        <button type="button" class="plugin-button"><span class="plugin-icon impostor">SS</span><span>sussmp-plugin</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-trash.png" alt=""><span>anticlean-plugin</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-grass.png" alt=""><span>farlands-plugin</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-skull.png" alt=""><span>sussmp-plugin</span></button>
         <button type="button" class="plugin-button"><span class="plugin-icon coin" aria-label="koin emas">🪙</span><span>MoneySMP</span></button>
-        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/senyawa-logo.jpg" alt="" style="object-fit:cover"><span>Senyawa SMP</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-senyawa.png" alt="" style="object-fit:cover"><span>Senyawa SMP</span></button>
       </div>
     </div>
   </section>
