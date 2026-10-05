@@ -241,8 +241,9 @@ img.avatar{object-fit:cover}
 img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 
 #profile-stars:focus-visible{outline:2px solid var(--acc2);outline-offset:8px}
-.pixel-meteor{position:fixed;z-index:0;pointer-events:none;left:var(--x);top:-80px;width:6px;height:6px;background:#fff5ae;box-shadow:6px 0 #ffd45d,-6px 0 #ffd45d,0 6px #ffd45d,0 -6px #ffd45d,12px -12px #8fd0ff,18px -18px #5aa8ff,24px -24px #36639b;animation:pixel-fall var(--duration) steps(48,end) var(--delay) both}
-@keyframes pixel-fall{from{opacity:0;transform:translate(0,0)}10%{opacity:1}85%{opacity:1}to{opacity:0;transform:translate(-50vw,calc(100vh + 160px))}}
+.pixel-meteor{position:fixed;z-index:0;pointer-events:none;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 7px 2px #fff5ae,0 0 18px 5px #5aa8ff;animation:star-fall var(--duration) ease-out var(--delay) both}
+.pixel-meteor::after{content:"";position:absolute;right:3px;bottom:3px;width:var(--tail);height:2px;border-radius:999px;background:linear-gradient(90deg,transparent,#8fd0ff,#fff);filter:blur(1px);transform:rotate(-35deg);transform-origin:right center}
+@keyframes star-fall{from{opacity:0;transform:translate(0,0) rotate(-35deg)}12%{opacity:1}82%{opacity:1}to{opacity:0;transform:translate(-45vw,calc(100vh + 180px)) rotate(-35deg)}}
 @media(prefers-reduced-motion:reduce){.pixel-meteor{display:none}}
 </style>
 </head>
@@ -256,7 +257,7 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 
 <main>
   <!-- ponytail: ganti foto profil cukup tukar file kuru.gif di folder yang sama -->
-  <button id="profile-stars" type="button" aria-label="Munculkan hujan bintang pixel" style="display:block;margin:0 auto;background:none;border:0;border-radius:50%;cursor:pointer"><img class="avatar" src="kuru.gif" alt="foto profil kuru"></button>
+  <button id="profile-stars" type="button" aria-label="Munculkan hujan bintang bercahaya" style="display:block;margin:0 auto;background:none;border:0;border-radius:50%;cursor:pointer"><img class="avatar" src="kuru.gif" alt="foto profil kuru"></button>
   <h1>kuru</h1>
   <div class="type-wrap"><span id="type"></span></div>
   <div class="chips">
@@ -477,11 +478,11 @@ document.getElementById('contact-form').addEventListener('submit',e=>{
   let busy=false,audio;
   document.getElementById('profile-stars').addEventListener('click',()=>{
     if(busy||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    busy=true;setTimeout(()=>busy=false,4500);
+    busy=true;setTimeout(()=>busy=false,5200);
     for(let i=0;i<48;i++){
       const star=document.createElement('i');star.className='pixel-meteor';star.setAttribute('aria-hidden','true');
-      star.style.cssText='--x:'+(Math.random()*150)+'vw;--duration:'+(1.2+Math.random()*1.4)+'s;--delay:'+(Math.random()*1.8)+'s';
-      document.body.appendChild(star);setTimeout(()=>star.remove(),4500);
+      star.style.cssText='--x:'+(Math.random()*150)+'vw;--y:'+(-10-Math.random()*35)+'vh;--tail:'+(20+Math.random()*35)+'px;--duration:'+(1.4+Math.random()*1.5)+'s;--delay:'+(Math.random()*1.8)+'s';
+      document.body.appendChild(star);setTimeout(()=>star.remove(),5200);
     }
     try{
       audio ||= new (window.AudioContext||window.webkitAudioContext)();
