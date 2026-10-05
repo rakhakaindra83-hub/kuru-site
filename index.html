@@ -249,6 +249,13 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 /* ---- cursor background parallax ---- */
 #bg-video{transform:translate(var(--bg-x,0px),var(--bg-y,0px)) scale(1.08);transition:transform .45s ease-out;pointer-events:none}
 @media(prefers-reduced-motion:reduce){#bg-video{transform:none;transition:none}}
+
+.dc-activity{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 14px;border:1px solid rgba(90,168,255,.35);border-radius:12px;background:rgba(90,168,255,.06)}
+.dc-activity[hidden]{display:none}
+.dc-activity img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:rgba(90,168,255,.12)}
+.dc-activity small{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.dc-activity b{display:block;font-size:.88rem;color:var(--ink)}
+.dc-activity span{display:block;font-size:.78rem;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -290,6 +297,10 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
     <div class="dc-spot" id="dc-spot" hidden>
       <img id="dc-art" alt="cover lagu">
       <div><small>sedang dengar di Spotify</small><b id="dc-song"></b><span id="dc-artist"></span></div>
+    </div>
+    <div class="dc-activity" id="dc-activity" hidden>
+      <img id="dc-activity-art" alt="ikon aktivitas">
+      <div><small>sedang bermain</small><b id="dc-activity-name"></b><span id="dc-activity-detail"></span></div>
     </div>
   </section>
 
@@ -538,7 +549,8 @@ document.querySelectorAll('.skill').forEach(el=>sk.observe(el));
   const ID='1358345285482319892';
   const $=id=>document.getElementById(id);
   const dot=$('dc-dot'),sub=$('dc-sub'),ava=$('dc-ava'),spot=$('dc-spot'),
-        art=$('dc-art'),song=$('dc-song'),artist=$('dc-artist');
+        art=$('dc-art'),song=$('dc-song'),artist=$('dc-artist'),activity=$('dc-activity'),
+        activityArt=$('dc-activity-art'),activityName=$('dc-activity-name'),activityDetail=$('dc-activity-detail');
   const ST={online:'#23a55a',idle:'#f0b232',dnd:'#f23f43',offline:'#80848e'};
   const TXT={online:'online-work',idle:'afk / idle',dnd:'jangan ganggu',offline:'offline'};
   let ws,hb;
@@ -558,6 +570,20 @@ document.querySelectorAll('.skill').forEach(el=>sk.observe(el));
       song.textContent=sp.details||'';
       artist.textContent=sp.state||'';
     }else spot.hidden=true;
+    const game=(p.activities||[]).find(a=>a.type===0 && a.name!=='Spotify');
+    if(game){
+      activity.hidden=false;
+      activityName.textContent=game.name||'Aktivitas Discord';
+      activityDetail.textContent=[game.details,game.state].filter(Boolean).join(' • ')||'sedang aktif';
+      const key=game.assets&&game.assets.large_image;
+      let image='';
+      if(key&&key.startsWith('mp:'))image='https://media.discordapp.net/'+key.slice(3);
+      else if(key&&key.startsWith('https://'))image=key;
+      else if(key&&game.application_id)image='https://cdn.discordapp.com/app-assets/'+encodeURIComponent(game.application_id)+'/'+encodeURIComponent(key)+'.png';
+      activityArt.hidden=!image;
+      if(image)activityArt.src=image;else activityArt.removeAttribute('src');
+      activityArt.onerror=()=>{activityArt.hidden=true;};
+    }else activity.hidden=true;
   }
   function conn(){
     clearInterval(hb);
