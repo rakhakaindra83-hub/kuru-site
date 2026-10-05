@@ -200,10 +200,15 @@ img.avatar{object-fit:cover}
   box-shadow: var(--glow);
 }
 
-#contact{margin-top:32px;padding:24px;border:1px solid #23466b;border-radius:14px;background:#0b2038;text-align:center}
-#contact a{color:var(--acc2);overflow-wrap:anywhere}
-#contact a:hover{color:var(--ink)}
-#contact a:focus-visible{outline:2px solid var(--acc);outline-offset:5px}
+#contact{position:relative;z-index:1;background:#0b2038;padding:40px 24px 90px;text-align:center}
+#contact-inner{max-width:612px;margin:auto}
+#contact p{color:var(--mut);line-height:1.6;margin-bottom:24px}
+#contact-form{display:grid;gap:10px;text-align:left}
+#contact-form input,#contact-form textarea{width:100%;padding:12px 14px;border:1px solid #355576;border-radius:9px;background:#071626;color:var(--ink);font:inherit}
+#contact-form textarea{min-height:140px;resize:vertical}
+#contact-form button{margin-top:8px;padding:12px;border:0;border-radius:9px;background:var(--acc);color:#071626;font:inherit;font-weight:700;cursor:pointer}
+#contact-form button:hover{background:var(--acc2)}
+#contact-form :focus-visible{outline:2px solid var(--acc2);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -277,11 +282,25 @@ img.avatar{object-fit:cover}
   </nav>
 
   <footer>© 2026 kuru — Anime Lover</footer>
-  <div id="contact" aria-labelledby="contact-title">
-    <h2 id="contact-title">// contact</h2>
-    <a href="mailto:rakhakaindra83@gmail.com">rakhakaindra83@gmail.com</a>
-  </div>
+
 </main>
+
+<div id="contact" aria-labelledby="contact-title">
+  <div id="contact-inner">
+    <h2 id="contact-title">// contact</h2>
+    <p>Tulis pesan untuk rakhakaindra83@gmail.com. Gmail akan terbuka dengan pesan terisi; login ke akun Gmail kamu, lalu klik Kirim di Gmail.</p>
+    <form id="contact-form">
+      <label for="contact-name">Nama</label>
+      <input id="contact-name" name="name" autocomplete="name" maxlength="100" required>
+      <label for="contact-subject">Subjek</label>
+      <input id="contact-subject" name="subject" maxlength="200" required>
+      <label for="contact-message">Pesan</label>
+      <textarea id="contact-message" name="message" maxlength="5000" required></textarea>
+      <button type="submit">Lanjutkan ke Gmail</button>
+    </form>
+  </div>
+</div>
+
 
 <!-- ponytail: video bg dari bg.mp4 (muted loop); backsound bgm.m4a nyala setelah klik splash -->
 <audio id="bgm" src="bgm.m4a" loop preload="none"></audio>
@@ -342,6 +361,15 @@ for(let i=0;i<N;i++)P.push({
   cx.globalAlpha=1;
   if(!RM)requestAnimationFrame(draw);
 })();
+
+// ---- contact: Gmail sends from the visitor's own account ----
+document.getElementById('contact-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=new FormData(e.currentTarget);
+  const url=new URL('https://mail.google.com/mail/');
+  url.search=new URLSearchParams({view:'cm',fs:'1',to:'rakhakaindra83@gmail.com',su:f.get('subject'),body:'Nama: '+f.get('name')+'\n\n'+f.get('message')});
+  window.location.assign(url.href);
+});
 
 // ---- musik ----
 const bgm=document.getElementById('bgm'),pill=document.getElementById('audio-pill'),lbl=document.getElementById('pill-label');
