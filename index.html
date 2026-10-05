@@ -239,6 +239,11 @@ img.avatar{object-fit:cover}
 .plugin-icon.coin{font-family:system-ui;font-size:1.35rem;background:rgba(255,193,7,.14);border:1px solid #dcae25}
 .plugin-icon.compound{color:#fff;background:#b52235;border:1px solid #ff5368;border-radius:50%;font-size:.95rem;box-shadow:0 0 12px rgba(255,55,80,.3)}
 img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
+
+#profile-stars:focus-visible{outline:2px solid var(--acc2);outline-offset:8px}
+.pixel-meteor{position:fixed;z-index:0;pointer-events:none;left:var(--x);top:-80px;width:6px;height:6px;background:#fff5ae;box-shadow:6px 0 #ffd45d,-6px 0 #ffd45d,0 6px #ffd45d,0 -6px #ffd45d,12px -12px #8fd0ff,18px -18px #5aa8ff,24px -24px #36639b;animation:pixel-fall var(--duration) steps(48,end) var(--delay) both}
+@keyframes pixel-fall{from{opacity:0;transform:translate(0,0)}10%{opacity:1}85%{opacity:1}to{opacity:0;transform:translate(-50vw,calc(100vh + 160px))}}
+@media(prefers-reduced-motion:reduce){.pixel-meteor{display:none}}
 </style>
 </head>
 <body>
@@ -251,7 +256,7 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 
 <main>
   <!-- ponytail: ganti foto profil cukup tukar file kuru.gif di folder yang sama -->
-  <img class="avatar" src="kuru.gif" alt="foto profil kuru">
+  <button id="profile-stars" type="button" aria-label="Munculkan hujan bintang pixel" style="display:block;margin:0 auto;background:none;border:0;border-radius:50%;cursor:pointer"><img class="avatar" src="kuru.gif" alt="foto profil kuru"></button>
   <h1>kuru</h1>
   <div class="type-wrap"><span id="type"></span></div>
   <div class="chips">
@@ -464,6 +469,32 @@ document.getElementById('contact-form').addEventListener('submit',e=>{
   document.querySelectorAll('button,.links a,.plugin-list a,#audio-pill').forEach(button=>{
     button.addEventListener('pointerenter',()=>sound(false));
     button.addEventListener('click',()=>sound(true));
+  });
+})();
+
+// ---- profile pixel meteor shower ----
+(function(){
+  let busy=false,audio;
+  document.getElementById('profile-stars').addEventListener('click',()=>{
+    if(busy||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    busy=true;setTimeout(()=>busy=false,4500);
+    for(let i=0;i<48;i++){
+      const star=document.createElement('i');star.className='pixel-meteor';star.setAttribute('aria-hidden','true');
+      star.style.cssText='--x:'+(Math.random()*150)+'vw;--duration:'+(1.2+Math.random()*1.4)+'s;--delay:'+(Math.random()*1.8)+'s';
+      document.body.appendChild(star);setTimeout(()=>star.remove(),4500);
+    }
+    try{
+      audio ||= new (window.AudioContext||window.webkitAudioContext)();
+      audio.resume().then(()=>{
+        const now=audio.currentTime;
+        [1046,1318,1568,2093,1568,1318].forEach((frequency,i)=>{
+          const tone=audio.createOscillator(),gain=audio.createGain(),start=now+i*.12;
+          tone.type='sine';tone.frequency.setValueAtTime(frequency,start);
+          gain.gain.setValueAtTime(.035,start);gain.gain.exponentialRampToValueAtTime(.001,start+.25);
+          tone.connect(gain);gain.connect(audio.destination);tone.start(start);tone.stop(start+.26);
+        });
+      }).catch(()=>{});
+    }catch(error){/* Silent fallback: animation remains usable. */}
   });
 })();
 
