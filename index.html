@@ -216,6 +216,15 @@ img.avatar{object-fit:cover}
 .mouse-glitter{width:var(--size);height:var(--size);background:var(--color);box-shadow:0 0 9px var(--color)}
 @keyframes mouse-pop{0%{opacity:.9;transform:translate(-50%,-50%) scale(.3)}70%{opacity:.75}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.35)}}
 @media (prefers-reduced-motion:reduce){.mouse-bubble,.mouse-glitter{display:none}}
+
+.special-tabs{display:flex;gap:10px;margin-bottom:18px}
+.special-tab{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--mut);font:inherit;font-weight:600;cursor:pointer;transition:.25s}
+.special-tab:hover,.special-tab.active{border-color:var(--acc);background:rgba(90,168,255,.12);color:var(--acc2);box-shadow:var(--glow)}
+.special-tab:focus-visible{outline:2px solid var(--acc2);outline-offset:3px}
+.special-panel[hidden]{display:none}
+.plugin-list{display:grid;gap:12px}
+.plugin-list a{display:block;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-decoration:none;transition:.25s}
+.plugin-list a:hover{border-color:var(--acc);color:var(--acc2);transform:translateX(4px);box-shadow:var(--glow)}
 </style>
 </head>
 <body>
@@ -260,10 +269,41 @@ img.avatar{object-fit:cover}
     </div>
   </section>
 
-  <section>
-      <h2>// Specials</h2>
-      <img src="Tak_berjudul208_20260925181612.png" alt="karya" style="display:block;width:100%;max-width:320px;height:auto;margin:0 auto;border-radius:12px">
-    </section>
+  <section id="specials">
+    <h2>// Specials</h2>
+    <div class="special-tabs" role="tablist" aria-label="Specials">
+      <button class="special-tab active" type="button" role="tab" aria-selected="true" aria-controls="art-panel" data-panel="art-panel">Art</button>
+      <button class="special-tab" type="button" role="tab" aria-selected="false" aria-controls="dev-panel" data-panel="dev-panel">Development</button>
+    </div>
+    <div id="art-panel" class="special-panel" role="tabpanel">
+      <div class="gallery">
+        <img src="Tak_berjudul208_20260925181612.png" alt="karya utama">
+        <img src="images/img1.webp" alt="karya 1">
+        <img src="images/img2.webp" alt="karya 2">
+        <img src="images/img3.webp" alt="karya 3">
+        <img src="images/img4.webp" alt="karya 4">
+        <img src="images/img5.webp" alt="karya 5">
+        <img src="images/img6.webp" alt="karya 6">
+        <img src="images/img7.webp" alt="karya 7">
+        <img src="images/img8.webp" alt="karya 8">
+        <img src="images/img9.webp" alt="karya 9">
+        <img src="images/img10.webp" alt="karya 10">
+        <img src="images/img11.webp" alt="karya 11">
+        <img src="images/img12.webp" alt="karya 12">
+        <img src="images/img13.webp" alt="karya 13">
+        <img src="images/img14.webp" alt="karya 14">
+        <img src="images/img15.webp" alt="karya 15">
+      </div>
+    </div>
+    <div id="dev-panel" class="special-panel" role="tabpanel" hidden>
+      <div class="plugin-list">
+        <a href="https://github.com/rakhakaindra83-hub/anticlean-plugin" target="_blank" rel="noopener">anticlean-plugin</a>
+        <a href="https://github.com/rakhakaindra83-hub/farlands-plugin" target="_blank" rel="noopener">farlands-plugin</a>
+        <a href="https://github.com/rakhakaindra83-hub/sussmp-plugin" target="_blank" rel="noopener">sussmp-plugin</a>
+        <a href="https://github.com/rakhakaindra83-hub/MoneySMP" target="_blank" rel="noopener">MoneySMP</a>
+      </div>
+    </div>
+  </section>
 
   <section>
     <h2>// skills</h2>
@@ -368,6 +408,13 @@ for(let i=0;i<N;i++)P.push({
   cx.globalAlpha=1;
   if(!RM)requestAnimationFrame(draw);
 })();
+
+
+// ---- specials tabs ----
+document.querySelectorAll('.special-tab').forEach(tab=>tab.addEventListener('click',()=>{
+  document.querySelectorAll('.special-tab').forEach(item=>{item.classList.toggle('active',item===tab);item.setAttribute('aria-selected',item===tab);});
+  document.querySelectorAll('.special-panel').forEach(panel=>{panel.hidden=panel.id!==tab.dataset.panel;});
+}));
 
 // ---- contact: Gmail sends from the visitor's own account ----
 document.getElementById('contact-form').addEventListener('submit',e=>{
