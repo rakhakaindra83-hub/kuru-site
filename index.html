@@ -245,6 +245,10 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 .pixel-meteor::after{content:"";position:absolute;left:3px;top:1px;width:var(--tail);height:2px;border-radius:999px;background:linear-gradient(90deg,#fff,#8fd0ff,transparent);filter:blur(1px);transform:rotate(var(--angle));transform-origin:left center}
 @keyframes star-fall{from{opacity:0;transform:translate(0,0)}12%{opacity:1}82%{opacity:1}to{opacity:0;transform:translate(-45vw,calc(100vh + 180px))}}
 @media(prefers-reduced-motion:reduce){.pixel-meteor{display:none}}
+
+/* ---- cursor background parallax ---- */
+#bg-video{transform:translate(var(--bg-x,0px),var(--bg-y,0px)) scale(1.08);transition:transform .45s ease-out;pointer-events:none}
+@media(prefers-reduced-motion:reduce){#bg-video{transform:none;transition:none}}
 </style>
 </head>
 <body>
@@ -302,11 +306,12 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
     </div>
     <div id="dev-panel" class="special-panel" role="tabpanel" hidden>
       <div class="plugin-list">
+        <button type="button" class="plugin-button"><svg class="plugin-icon" viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><path fill="#303949" d="M5 2h6v1h2v2h1v8h-2v2H4v-2H2V5h1V3h2z"/><path fill="#bdcbd7" d="M5 3h6v1h1v2h1v6h-2v2H5v-2H3V6h1V4h1z"/><path fill="#edf4fc" d="M5 4h3v2H4V5h1z"/><path fill="#62778e" d="M9 4h2v2h1v6h-2v1H9z"/><path fill="#101826" d="M4 7h8v2H4zM6 10h1v3H6zM9 10h1v3H9z"/><path fill="#e5b957" d="M7 1h2v6H7z"/></svg><span>RISE SMP</span></button>
         <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-trash.png" alt=""><span>anticlean-plugin</span></button>
         <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-grass.png" alt=""><span>farlands-plugin</span></button>
         <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-skull.png" alt=""><span>sussmp-plugin</span></button>
         <button type="button" class="plugin-button"><span class="plugin-icon coin" aria-label="koin emas">🪙</span><span>LOYAL SMP</span></button>
-        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-senyawa.png" alt="" style="object-fit:cover"><span>Senyawa SMP</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-senyawa.png" alt="" style="object-fit:cover"><span>Senyawa SMP S2</span></button>
       </div>
     </div>
   </section>
@@ -498,6 +503,18 @@ document.getElementById('contact-form').addEventListener('submit',e=>{
       }).catch(()=>{});
     }catch(error){/* Silent fallback: animation remains usable. */}
   });
+})();
+
+// ---- cursor background parallax ----
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const bg=document.getElementById('bg-video');
+  function move(x,y){bg.style.setProperty('--bg-x',x+'px');bg.style.setProperty('--bg-y',y+'px');}
+  addEventListener('pointermove',e=>{
+    if(e.pointerType==='touch')return;
+    move(Math.max(-1,Math.min(1,e.clientX/innerWidth*2-1))*16,Math.max(-1,Math.min(1,e.clientY/innerHeight*2-1))*12);
+  },{passive:true});
+  document.documentElement.addEventListener('pointerleave',()=>move(0,0));
 })();
 
 // ---- musik ----
