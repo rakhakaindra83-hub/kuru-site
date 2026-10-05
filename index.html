@@ -242,8 +242,8 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 
 #profile-stars:focus-visible{outline:2px solid var(--acc2);outline-offset:8px}
 .pixel-meteor{position:fixed;z-index:0;pointer-events:none;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 7px 2px #fff5ae,0 0 18px 5px #5aa8ff;animation:star-fall var(--duration) ease-out var(--delay) both}
-.pixel-meteor::after{content:"";position:absolute;left:3px;top:1px;width:var(--tail);height:2px;border-radius:999px;background:linear-gradient(90deg,#fff,#8fd0ff,transparent);filter:blur(1px);transform:rotate(-35deg);transform-origin:left center}
-@keyframes star-fall{from{opacity:0;transform:translate(0,0) rotate(-35deg)}12%{opacity:1}82%{opacity:1}to{opacity:0;transform:translate(-45vw,calc(100vh + 180px))}}
+.pixel-meteor::after{content:"";position:absolute;left:3px;top:1px;width:var(--tail);height:2px;border-radius:999px;background:linear-gradient(90deg,#fff,#8fd0ff,transparent);filter:blur(1px);transform:rotate(var(--angle));transform-origin:left center}
+@keyframes star-fall{from{opacity:0;transform:translate(0,0)}12%{opacity:1}82%{opacity:1}to{opacity:0;transform:translate(-45vw,calc(100vh + 180px))}}
 @media(prefers-reduced-motion:reduce){.pixel-meteor{display:none}}
 </style>
 </head>
@@ -481,7 +481,8 @@ document.getElementById('contact-form').addEventListener('submit',e=>{
     busy=true;setTimeout(()=>busy=false,5200);
     for(let i=0;i<48;i++){
       const star=document.createElement('i');star.className='pixel-meteor';star.setAttribute('aria-hidden','true');
-      star.style.cssText='--x:'+(Math.random()*150)+'vw;--y:'+(-10-Math.random()*35)+'vh;--tail:'+(20+Math.random()*35)+'px;--duration:'+(1.4+Math.random()*1.5)+'s;--delay:'+(Math.random()*1.8)+'s';
+      star.style.setProperty("--angle",Math.atan2(-(innerHeight+180),innerWidth*.45)*180/Math.PI+"deg");
+      star.style.cssText+='--x:'+(Math.random()*150)+'vw;--y:'+(-10-Math.random()*35)+'vh;--tail:'+(20+Math.random()*35)+'px;--duration:'+(1.4+Math.random()*1.5)+'s;--delay:'+(Math.random()*1.8)+'s';
       document.body.appendChild(star);setTimeout(()=>star.remove(),5200);
     }
     try{
