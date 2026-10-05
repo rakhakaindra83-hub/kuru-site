@@ -222,6 +222,9 @@ img.avatar{object-fit:cover}
 .special-tab:hover,.special-tab.active{border-color:var(--acc);background:rgba(90,168,255,.12);color:var(--acc2);box-shadow:var(--glow)}
 .special-tab:focus-visible{outline:2px solid var(--acc2);outline-offset:3px}
 .special-panel[hidden]{display:none}
+.special-panel:not([hidden]){animation:specials-enter .35s ease-out both}
+@keyframes specials-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.special-panel:not([hidden]){animation:none}}
 .plugin-list{display:grid;gap:12px}
 .plugin-list a{display:block;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-decoration:none;transition:.25s}
 .plugin-list a:hover{border-color:var(--acc);color:var(--acc2);transform:translateX(4px);box-shadow:var(--glow)}
@@ -397,6 +400,7 @@ for(let i=0;i<N;i++)P.push({
 
 // ---- specials tabs ----
 document.querySelectorAll('.special-tab').forEach(tab=>tab.addEventListener('click',()=>{
+  if(!document.getElementById(tab.dataset.panel).hidden)return;
   document.querySelectorAll('.special-tab').forEach(item=>{item.classList.toggle('active',item===tab);item.setAttribute('aria-selected',item===tab);});
   document.querySelectorAll('.special-panel').forEach(panel=>{panel.hidden=panel.id!==tab.dataset.panel;});
 }));
