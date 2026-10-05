@@ -256,7 +256,13 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 .dc-activity small{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
 .dc-activity b{display:block;font-size:.88rem;color:var(--ink)}
 .dc-activity span{display:block;font-size:.78rem;color:var(--mut)}
+
+/* ---- commission closed ---- */
+.commission-status{text-align:center;padding:30px 20px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.commission-lock{display:block;width:64px;height:64px;margin:0 auto 22px}
+.commission-close{font-family:"Press Start 2P",monospace;font-size:clamp(.85rem,4vw,1.15rem);color:var(--acc2);letter-spacing:.12em;line-height:1.8}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -324,6 +330,19 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
         <button type="button" class="plugin-button"><span class="plugin-icon coin" aria-label="koin emas">🪙</span><span>LOYAL SMP</span></button>
         <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-senyawa.png" alt="" style="object-fit:cover"><span>Senyawa SMP S2</span></button>
       </div>
+    </div>
+  </section>
+
+  <section id="commission" aria-labelledby="commission-title">
+    <h2 id="commission-title">// COMMISON</h2>
+    <div class="commission-status">
+      <svg class="commission-lock" viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges">
+        <path fill="#8fd0ff" d="M5 1h6v1h1v1h1v5h-2V4h-1V3H6v1H5v4H3V3h1V2h1z"/>
+        <path fill="#5aa8ff" d="M2 7h12v8H2z"/>
+        <path fill="#bfe5ff" d="M3 8h10v1H3z"/>
+        <path fill="#0b2038" d="M7 10h2v2H8v2H7z"/>
+      </svg>
+      <p class="commission-close">CLOSE</p>
     </div>
   </section>
 
