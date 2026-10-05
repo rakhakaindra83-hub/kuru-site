@@ -276,23 +276,8 @@ img.avatar{object-fit:cover}
       <button class="special-tab" type="button" role="tab" aria-selected="false" aria-controls="dev-panel" data-panel="dev-panel">Development</button>
     </div>
     <div id="art-panel" class="special-panel" role="tabpanel">
-      <div class="gallery">
-        <img src="Tak_berjudul208_20260925181612.png" alt="karya utama">
-        <img src="images/img1.webp" alt="karya 1">
-        <img src="images/img2.webp" alt="karya 2">
-        <img src="images/img3.webp" alt="karya 3">
-        <img src="images/img4.webp" alt="karya 4">
-        <img src="images/img5.webp" alt="karya 5">
-        <img src="images/img6.webp" alt="karya 6">
-        <img src="images/img7.webp" alt="karya 7">
-        <img src="images/img8.webp" alt="karya 8">
-        <img src="images/img9.webp" alt="karya 9">
-        <img src="images/img10.webp" alt="karya 10">
-        <img src="images/img11.webp" alt="karya 11">
-        <img src="images/img12.webp" alt="karya 12">
-        <img src="images/img13.webp" alt="karya 13">
-        <img src="images/img14.webp" alt="karya 14">
-        <img src="images/img15.webp" alt="karya 15">
+      <div class="gallery" style="display:block">
+        <img src="Tak_berjudul208_20260925181612.png" alt="karya" style="display:block;max-width:320px;height:auto;aspect-ratio:auto;margin:0 auto">
       </div>
     </div>
     <div id="dev-panel" class="special-panel" role="tabpanel" hidden>
@@ -440,6 +425,30 @@ document.getElementById('contact-form').addEventListener('submit',e=>{
   }
   addEventListener('pointermove',e=>{const now=performance.now();if(now-last>55){last=now;pop(e.clientX,e.clientY,false);}});
   addEventListener('pointerdown',e=>{pop(e.clientX,e.clientY,true);for(let i=0;i<5;i++)setTimeout(()=>pop(e.clientX+(Math.random()*30-15),e.clientY+(Math.random()*30-15),false),i*35);});
+})();
+
+// ---- button sounds: native Web Audio, no extra files ----
+(function(){
+  let audio;
+  function sound(click){
+    try{
+      audio ||= new (window.AudioContext || window.webkitAudioContext)();
+      if(audio.state!=='running')return;
+      const oscillator=audio.createOscillator(),gain=audio.createGain(),now=audio.currentTime;
+      oscillator.type='sine';oscillator.frequency.setValueAtTime(click?660:880,now);
+      oscillator.frequency.exponentialRampToValueAtTime(click?990:1100,now+.06);
+      gain.gain.setValueAtTime(.035,now);gain.gain.exponentialRampToValueAtTime(.001,now+.10);
+      oscillator.connect(gain);gain.connect(audio.destination);oscillator.start(now);oscillator.stop(now+.11);
+    }catch(error){/* Audio is optional; buttons still work. */}
+  }
+  // Browsers require a visitor gesture before hover audio is allowed.
+  document.addEventListener('pointerdown',()=>{
+    try{audio ||= new (window.AudioContext || window.webkitAudioContext)();audio.resume().catch(()=>{});}catch(error){}
+  },{capture:true});
+  document.querySelectorAll('button,.links a,.plugin-list a,#audio-pill').forEach(button=>{
+    button.addEventListener('pointerenter',()=>sound(false));
+    button.addEventListener('click',()=>sound(true));
+  });
 })();
 
 // ---- musik ----
