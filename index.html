@@ -209,6 +209,13 @@ img.avatar{object-fit:cover}
 #contact-form button{margin-top:8px;padding:12px;border:0;border-radius:9px;background:var(--acc);color:#071626;font:inherit;font-weight:700;cursor:pointer}
 #contact-form button:hover{background:var(--acc2)}
 #contact-form :focus-visible{outline:2px solid var(--acc2);outline-offset:3px}
+
+/* ---- mouse bubbles + glitter ---- */
+.mouse-bubble,.mouse-glitter{position:fixed;pointer-events:none;z-index:45;border-radius:50%;transform:translate(-50%,-50%);animation:mouse-pop .8s ease-out forwards}
+.mouse-bubble{width:var(--size);height:var(--size);border:1px solid rgba(143,208,255,.75);background:radial-gradient(circle,rgba(90,168,255,.28),rgba(90,168,255,0) 70%);box-shadow:0 0 16px rgba(90,168,255,.35)}
+.mouse-glitter{width:var(--size);height:var(--size);background:var(--color);box-shadow:0 0 9px var(--color)}
+@keyframes mouse-pop{0%{opacity:.9;transform:translate(-50%,-50%) scale(.3)}70%{opacity:.75}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.35)}}
+@media (prefers-reduced-motion:reduce){.mouse-bubble,.mouse-glitter{display:none}}
 </style>
 </head>
 <body>
@@ -370,6 +377,23 @@ document.getElementById('contact-form').addEventListener('submit',e=>{
   url.search=new URLSearchParams({view:'cm',fs:'1',to:'rakhakaindra83@gmail.com',su:f.get('subject'),body:'Nama: '+f.get('name')+'\n\n'+f.get('message')});
   window.location.assign(url.href);
 });
+
+
+// ---- mouse interaction: bubbles and glitter ----
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  let last=0;
+  const colors=['#5aa8ff','#8fd0ff','#ffffff'];
+  function pop(x,y,click){
+    const el=document.createElement('i');
+    el.className=click?'mouse-bubble':'mouse-glitter';
+    const size=click?(Math.random()*18+18):(Math.random()*4+3);
+    el.style.cssText='left:'+x+'px;top:'+y+'px;--size:'+size+'px;--dx:'+(Math.random()*70-35)+'px;--dy:'+(Math.random()*70-45)+'px;--color:'+colors[Math.random()*colors.length|0];
+    document.body.appendChild(el);setTimeout(()=>el.remove(),850);
+  }
+  addEventListener('pointermove',e=>{const now=performance.now();if(now-last>55){last=now;pop(e.clientX,e.clientY,false);}});
+  addEventListener('pointerdown',e=>{pop(e.clientX,e.clientY,true);for(let i=0;i<5;i++)setTimeout(()=>pop(e.clientX+(Math.random()*30-15),e.clientY+(Math.random()*30-15),false),i*35);});
+})();
 
 // ---- musik ----
 const bgm=document.getElementById('bgm'),pill=document.getElementById('audio-pill'),lbl=document.getElementById('pill-label');
