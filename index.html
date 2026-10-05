@@ -261,6 +261,12 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 .commission-status{text-align:center;padding:30px 20px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
 .commission-lock{display:block;width:64px;height:64px;margin:0 auto 22px}
 .commission-close{font-family:"Press Start 2P",monospace;font-size:clamp(.85rem,4vw,1.15rem);color:var(--acc2);letter-spacing:.12em;line-height:1.8}
+
+#commission-lock-button{display:block;margin:0 auto 22px;padding:8px;border:0;border-radius:8px;background:none;cursor:pointer}
+#commission-lock-button .commission-lock{margin:0}
+#commission-lock-button:focus-visible{outline:2px solid var(--acc2);outline-offset:4px}
+#commission-lock-button.shaking .commission-lock{animation:lock-rattle .4s ease-in-out}
+@keyframes lock-rattle{0%,100%{transform:translateX(0) rotate(0)}20%,60%{transform:translateX(-4px) rotate(-7deg)}40%,80%{transform:translateX(4px) rotate(7deg)}}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
@@ -336,12 +342,14 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
   <section id="commission" aria-labelledby="commission-title">
     <h2 id="commission-title">// COMMISON</h2>
     <div class="commission-status">
+      <button id="commission-lock-button" type="button" aria-label="Komisi ditutup: coba gembok">
       <svg class="commission-lock" viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges">
         <path fill="#8fd0ff" d="M5 1h6v1h1v1h1v5h-2V4h-1V3H6v1H5v4H3V3h1V2h1z"/>
         <path fill="#5aa8ff" d="M2 7h12v8H2z"/>
         <path fill="#bfe5ff" d="M3 8h10v1H3z"/>
         <path fill="#0b2038" d="M7 10h2v2H8v2H7z"/>
       </svg>
+      </button>
       <p class="commission-close">CLOSE</p>
     </div>
   </section>
@@ -545,6 +553,29 @@ document.getElementById('contact-form').addEventListener('submit',e=>{
     move(Math.max(-1,Math.min(1,e.clientX/innerWidth*2-1))*16,Math.max(-1,Math.min(1,e.clientY/innerHeight*2-1))*12);
   },{passive:true});
   document.documentElement.addEventListener('pointerleave',()=>move(0,0));
+})();
+
+// ---- closed commission lock feedback ----
+(function(){
+  const button=document.getElementById('commission-lock-button');let busy=false,audio;
+  button.addEventListener('click',()=>{
+    if(busy)return;
+    busy=true;button.classList.add('shaking');
+    setTimeout(()=>{button.classList.remove('shaking');busy=false;},450);
+    try{
+      audio ||= new (window.AudioContext||window.webkitAudioContext)();
+      audio.resume().then(()=>{
+        const now=audio.currentTime;
+        [0,.07,.16].forEach((delay,i)=>{
+          const tone=audio.createOscillator(),gain=audio.createGain(),start=now+delay;
+          tone.type='triangle';tone.frequency.setValueAtTime(i===1?1200:720,start);
+          tone.frequency.exponentialRampToValueAtTime(160,start+.045);
+          gain.gain.setValueAtTime(.05,start);gain.gain.exponentialRampToValueAtTime(.001,start+.06);
+          tone.connect(gain);gain.connect(audio.destination);tone.start(start);tone.stop(start+.065);
+        });
+      }).catch(()=>{});
+    }catch(error){/* Lock feedback still works without audio support. */}
+  });
 })();
 
 // ---- musik ----
