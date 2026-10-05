@@ -228,6 +228,16 @@ img.avatar{object-fit:cover}
 .plugin-list{display:grid;gap:12px}
 .plugin-list a{display:block;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-decoration:none;transition:.25s}
 .plugin-list a:hover{border-color:var(--acc);color:var(--acc2);transform:translateX(4px);box-shadow:var(--glow)}
+
+.plugin-button{width:100%;display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);font:inherit;text-align:left;font-weight:600;cursor:pointer;transition:.25s}
+.plugin-button:hover{border-color:var(--acc);color:var(--acc2);transform:translateX(4px);box-shadow:var(--glow)}
+.plugin-button:focus-visible{outline:2px solid var(--acc2);outline-offset:3px}
+.plugin-icon{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex:none;border-radius:9px;font-family:"JetBrains Mono",monospace;font-size:.63rem;font-weight:700}
+.plugin-icon.shield{color:#8fd0ff;background:rgba(90,168,255,.16);border:1px solid #5aa8ff}
+.plugin-icon.terrain{color:#8fe3a1;background:rgba(62,180,92,.16);border:1px solid #3eb45c}
+.plugin-icon.impostor{color:#ff8e9e;background:rgba(220,55,75,.16);border:1px solid #dc374b}
+.plugin-icon.coin{font-family:system-ui;font-size:1.35rem;background:rgba(255,193,7,.14);border:1px solid #dcae25}
+.plugin-icon.compound{color:#fff;background:#b52235;border:1px solid #ff5368;border-radius:50%;font-size:.95rem;box-shadow:0 0 12px rgba(255,55,80,.3)}
 </style>
 </head>
 <body>
@@ -285,10 +295,12 @@ img.avatar{object-fit:cover}
     </div>
     <div id="dev-panel" class="special-panel" role="tabpanel" hidden>
       <div class="plugin-list">
-        <a href="https://github.com/rakhakaindra83-hub/anticlean-plugin" target="_blank" rel="noopener">anticlean-plugin</a>
-        <a href="https://github.com/rakhakaindra83-hub/farlands-plugin" target="_blank" rel="noopener">farlands-plugin</a>
-        <a href="https://github.com/rakhakaindra83-hub/sussmp-plugin" target="_blank" rel="noopener">sussmp-plugin</a>
-        <a href="https://github.com/rakhakaindra83-hub/MoneySMP" target="_blank" rel="noopener">MoneySMP</a>
+        <button type="button" class="plugin-button"><span class="plugin-icon shield">AC</span><span>anticlean-plugin</span></button>
+        <button type="button" class="plugin-button"><span class="plugin-icon terrain">FL</span><span>farlands-plugin</span></button>
+        <button type="button" class="plugin-button"><span class="plugin-icon impostor">SS</span><span>sussmp-plugin</span></button>
+        <button type="button" class="plugin-button"><span class="plugin-icon coin" aria-label="koin emas">🪙</span><span>MoneySMP</span></button>
+        <button type="button" class="plugin-button"><span class="plugin-icon compound" aria-label="Senyawa SMP">S</span><span>senyawa_modif</span></button>
+        <button type="button" class="plugin-button"><span class="plugin-icon compound" aria-label="Senyawa SMP">S</span><span>senyawa-combat</span></button>
       </div>
     </div>
   </section>
