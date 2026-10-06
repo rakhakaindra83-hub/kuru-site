@@ -267,6 +267,12 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 #commission-lock-button:focus-visible{outline:2px solid var(--acc2);outline-offset:4px}
 #commission-lock-button.shaking .commission-lock{animation:lock-rattle .4s ease-in-out}
 @keyframes lock-rattle{0%,100%{transform:translateX(0) rotate(0)}20%,60%{transform:translateX(-4px) rotate(-7deg)}40%,80%{transform:translateX(4px) rotate(7deg)}}
+
+.ocean-commission-link{position:relative;display:block;margin:42px 0 0;padding:22px 28px;border:1px solid #83e8e666;border-radius:24px;background:#082633;color:#dbfcf8;text-decoration:none;overflow:hidden;box-shadow:0 0 30px #4fcac218;transition:transform .35s,box-shadow .35s,border-color .35s}
+.ocean-commission-link:before{content:"";position:absolute;inset:-80%;background:radial-gradient(ellipse,#8ff0e622,transparent 60%);translate:-30% 0;transition:translate .7s;pointer-events:none}
+.ocean-commission-link:hover{transform:translateY(-4px);box-shadow:0 8px 40px #63ddd535;border-color:#8ff0e6}.ocean-commission-link:hover:before{translate:30% 0}
+.ocean-commission-link span{display:block;position:relative;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#91bebf}.ocean-commission-link strong{position:relative;display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:24px;font-weight:500}.ocean-commission-link i{font-style:normal;color:#8ff0e6;transition:transform .35s}.ocean-commission-link:hover i{transform:translate(3px,-3px)}.ocean-commission-link:focus-visible{outline:2px solid #8ff0e6;outline-offset:5px}
+.ocean-transition{position:fixed;inset:0;z-index:100;pointer-events:none;background:radial-gradient(circle at var(--origin-x,50%) var(--origin-y,50%),#123f50,#020f1c 65%);clip-path:circle(0 at var(--origin-x,50%) var(--origin-y,50%));transition:clip-path .9s cubic-bezier(.22,1,.36,1)}.ocean-transition.active{clip-path:circle(150vmax at var(--origin-x,50%) var(--origin-y,50%))}.ocean-transition:after{content:"";position:absolute;left:50%;top:50%;width:90px;height:90px;border-radius:50%;border:1px solid #8ff0e677;box-shadow:0 0 55px #8ff0e633;animation:ocean-ring 1s ease-out forwards}@keyframes ocean-ring{from{transform:translate(-50%,-50%) scale(.4);opacity:1}to{transform:translate(-50%,-50%) scale(5);opacity:0}}@media(prefers-reduced-motion:reduce){.ocean-transition{display:none}.ocean-commission-link:hover{transform:none}}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
@@ -339,6 +345,7 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
     </div>
   </section>
 
+  <a id="ocean-commission-link" class="ocean-commission-link" href="https://rakhakaindra83-hub.github.io/kuru-ocean-studio/"><span>Art &amp; Development</span><strong>Commission <i aria-hidden="true">↗</i></strong></a>
   <section id="commission" aria-labelledby="commission-title">
     <h2 id="commission-title">// COMMISON</h2>
     <div class="commission-status">
@@ -403,6 +410,10 @@ img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
 <div id="audio-pill" title="putar musik"><span class="eq"><b></b><b></b><b></b></span><span id="pill-label">I CAN'T STOP THE LONELINESS — klik utk play</span></div>
 
 <script>
+
+// Commission portal: a short ocean iris transition before native navigation.
+(()=>{const link=document.getElementById('ocean-commission-link');let leaving=false;link.addEventListener('click',e=>{if(e.ctrlKey||e.metaKey||e.shiftKey||e.altKey||matchMedia('(prefers-reduced-motion: reduce)').matches)return;e.preventDefault();if(leaving)return;leaving=true;const overlay=document.createElement('div');overlay.className='ocean-transition';overlay.setAttribute('aria-hidden','true');const rect=link.getBoundingClientRect();overlay.style.setProperty('--origin-x',(rect.left+rect.width/2)+'px');overlay.style.setProperty('--origin-y',(rect.top+rect.height/2)+'px');document.body.appendChild(overlay);let done=false;const go=()=>{if(done)return;done=true;location.assign(link.href);};overlay.addEventListener('transitionend',event=>{if(event.target===overlay&&event.propertyName==='clip-path')go();});requestAnimationFrame(()=>requestAnimationFrame(()=>overlay.classList.add('active')));setTimeout(go,1100);});})();
+
 // ---- splash: masuk + mulai musik (gesture pertama = boleh autoplay) ----
 const splash=document.getElementById('splash');
 splash.addEventListener('click',()=>{
