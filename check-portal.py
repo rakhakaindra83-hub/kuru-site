@@ -14,6 +14,7 @@ with sync_playwright() as p:
     page.locator('#ocean-commission-link').click()
     page.wait_for_selector('.ocean-transition.active')
     assert page.url != url
+    assert page.evaluate("window.__oceanAudio && window.__oceanAudio.state === 'running'")
     page.wait_for_url(url)
     reduced = browser.new_page(reduced_motion='reduce', viewport={'width': 390, 'height': 844})
     reduced.route(url, lambda route: route.fulfill(body='Reduced motion destination verified'))
