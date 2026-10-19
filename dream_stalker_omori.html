@@ -1088,9 +1088,9 @@
         </div>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
-          <button type="button" class="omori-btn red-cta" data-action="trigger-download">
+          <a href="https://rakhakaindra83-hub.github.io/dream-stalker-site/downloads/dreamstalker-1.0.0.jar" download="dreamstalker-1.0.0.jar" class="omori-btn red-cta" data-action="trigger-download">
             Download dreamstalker-1.0.0.jar
-          </button>
+          </a>
           <a href="https://github.com/rakhakaindra83-hub/dream-stalker-site" target="_blank" rel="noopener" class="omori-btn">
             View GitHub Repository
           </a>
@@ -1558,6 +1558,14 @@
       } else if (action === "trigger-download") {
         sfxSelect();
         typeDialogue("DOWNLOAD MANAGER", "Starting download for 'dreamstalker-1.0.0.jar' (Fabric 1.21.8 • Java 21 • Kuru Studio)!");
+        if (!el.getAttribute("href")) {
+          const dl = document.createElement("a");
+          dl.href = "https://rakhakaindra83-hub.github.io/dream-stalker-site/downloads/dreamstalker-1.0.0.jar";
+          dl.download = "dreamstalker-1.0.0.jar";
+          document.body.appendChild(dl);
+          dl.click();
+          dl.remove();
+        }
       } else if (action === "cycle-dialogue") {
         sfxSelect();
         const msg = LORE_TIPS[tipCount % LORE_TIPS.length];
