@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en" data-space="whitespace">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DREAM STALKER — A Liminal Fabric Mod (OMORI 1:1 Edition)</title>
+  <style>
+    /* =====================================================================
+       1:1 OMORI OFFICIAL WEBSITE (https://www.omori-game.com/en) THEME
+       APPLIED TO "DREAM STALKER — A LIMINAL FABRIC MOD" (kuru studio)
+       ===================================================================== */
+    :root {
+      --bg-color: #ffffff;
+      --ink-color: #000000;
+      --muted-color: #4a4a4a;
+      --rpg-black: #000000;
+      --rpg-white: #ffffff;
+      --omori-red: #ff1a1a;
+      --headspace-violet: #9d4edd;
+      --headspace-cyan: #00f3ff;
+      --headspace-pink: #ff75c3;
+      --fear-vignette: 0;
+      --fear-jitter: 0px;
+      --font-pixel: 'Courier New', Consolas, 'Lucida Console', monospace;
+      --font-marker: 'Comic Sans MS', 'Bradley Hand', 'Chalkboard SE', 'Segoe Print', cursive, sans-serif;
+    }
+
+    /* BLACK SPACE / TERROR MODE (Fear >= 76 or Hanging Lightbulb toggled) */
+    [data-space="blackspace"] {
+      --bg-color: #050507;
+      --ink-color: #f4f4f6;
+      --muted-color: #a0a0ab;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--ink-color);
+      font-family: var(--font-pixel);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      transition: background-color 0.3s steps(3), color 0.3s steps(3);
+      padding-bottom: 220px;
+    }
+
+    button, input, select {
+      font-family: var(--font-pixel);
+    }
+
+    /* =====================================================================
+       FEAR METER VIGNETTE, CRT SCANLINES & BLACK SPACE LURKING STALKER EYES
+       ===================================================================== */
+    .fear-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 90;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 45%, rgba(255, 0, 0, calc(var(--fear-vignette) * 0.45)) 82%, rgba(0, 0, 0, calc(var(--fear-vignette) * 0.88)) 100%),
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.04) 0px, rgba(0, 0, 0, 0.04) 1px, transparent 1px, transparent 3px);
+      transition: background 0.2s ease;
+    }
+
+    .stalker-eyes-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.35s steps(3);
+    }
+
+    [data-space="blackspace"] .stalker-eyes-layer {
+      opacity: 1;
+    }
+
+    .something-eye {
+      position: absolute;
+      animation: floatEye 3.6s steps(4) infinite alternate;
+      opacity: 0.32;
+    }
+
+    @keyframes floatEye {
+      0% { transform: translateY(0px) rotate(-2deg) scale(1); }
+      100% { transform: translateY(-14px) rotate(3deg) scale(1.05); }
+    }
+
+    body.reality-flicker {
+      animation: realityShift 0.42s steps(2);
+    }
+
+    @keyframes realityShift {
+      0% { filter: invert(1) contrast(2); transform: translate(-3px, 2px); }
+      33% { filter: invert(0); transform: translate(3px, -2px); }
+      66% { filter: invert(1) hue-rotate(90deg); transform: translate(-2px, 0); }
+      100% { filter: none; transform: none; }
+    }
+
+    /* =====================================================================
+       1:1 OMORI RPG DOUBLE WHITE-ON-BLACK BORDER & SKETCHY FRAMES
+       ===================================================================== */
+    .rpg-window {
+      background: #000000;
+      color: #ffffff;
+      border: 3px solid #000000;
+      box-shadow:
+        inset 0 0 0 3px #ffffff,
+        0 8px 0 rgba(0, 0, 0, 0.16);
+      padding: 20px;
+      position: relative;
+    }
+
+    [data-space="blackspace"] .rpg-window {
+      box-shadow:
+        inset 0 0 0 3px #ffffff,
+        0 0 22px rgba(255, 26, 26, 0.28);
+    }
+
+    .sketch-frame {
+      background: var(--bg-color);
+      color: var(--ink-color);
+      border: 3px solid var(--ink-color);
+      box-shadow: 6px 6px 0 var(--ink-color);
+      padding: 20px;
+      position: relative;
+    }
+
+    [data-space="blackspace"] .sketch-frame {
+      border-color: var(--omori-red);
+      box-shadow: 6px 6px 0 var(--omori-red);
+    }
+
+    /* =====================================================================
+       1:1 HEADER: HANGING BLACK LIGHTBULB INTO THE "O" / TITLE & RPG NAVBAR
+       ===================================================================== */
+    .omori-header {
+      max-width: 980px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      padding: 0 16px;
+    }
+
+    .lightbulb-hanger {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transform-origin: top center;
+      animation: swayCord 3.8s ease-in-out infinite alternate;
+      padding: 0 18px;
+    }
+
+    .lightbulb-hanger:hover {
+      animation-duration: 1.1s;
+    }
+
+    @keyframes swayCord {
+      0% { transform: rotate(-2.5deg); }
+      100% { transform: rotate(2.5deg); }
+    }
+
+    .bulb-caption {
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: #000;
+      color: #fff;
+      border: 1.5px solid #fff;
+      outline: 2px solid #000;
+      padding: 2px 8px;
+      margin-top: 4px;
+      letter-spacing: 0.08em;
+    }
+
+    [data-space="blackspace"] .bulb-caption {
+      color: var(--omori-red);
+      border-color: var(--omori-red);
+    }
+
+    .sketch-logo-title {
+      font-family: var(--font-marker);
+      font-size: clamp(2.1rem, 5.2vw, 3.6rem);
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin: 8px 0 4px;
+      line-height: 1.08;
+      text-shadow: 2px 2px 0 rgba(255, 26, 26, 0.22);
+    }
+
+    .sketch-subbrand {
+      font-family: var(--font-pixel);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      color: var(--muted-color);
+    }
+
+    /* 1:1 OMORI Horizontal Bar of Retro RPG Buttons */
+    .omori-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .omori-nav-btn,
+    .omori-btn {
+      background: #000000;
+      color: #ffffff;
+      border: 3px solid #000000;
+      box-shadow: inset 0 0 0 2px #ffffff;
+      padding: 9px 16px 9px 32px;
+      font-family: var(--font-pixel);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.1s steps(2);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+
+    .omori-nav-btn:hover,
+    .omori-nav-btn.active,
+    .omori-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: inset 0 0 0 2px var(--omori-red);
+    }
+
+    /* Iconic Red Pixel Pointing Hand Cursor on Hover / Active */
+    .omori-nav-btn::before,
+    .omori-btn::before {
+      content: "☞";
+      position: absolute;
+      left: 9px;
+      top: 50%;
+      transform: translateY(-52%);
+      color: var(--omori-red);
+      font-size: 1.1rem;
+      opacity: 0;
+    }
+
+    .omori-nav-btn:hover::before,
+    .omori-nav-btn.active::before,
+    .omori-btn:hover::before {
+      opacity: 1;
+      animation: pointHand 0.5s steps(2) infinite alternate;
+    }
+
+    @keyframes pointHand {
+      0% { transform: translate(0px, -52%); }
+      100% { transform: translate(4px, -52%); }
+    }
+
+    .omori-btn.red-cta {
+      background: var(--omori-red);
+      box-shadow: inset 0 0 0 2px #ffffff;
+    }
+
+    .omori-btn.red-cta::before {
+      color: #ffffff;
+    }
+
+    /* =====================================================================
+       CENTRAL VIEWPORT STAGE (Dynamic Single-Page Switching like omori-game.com/en)
+       ===================================================================== */
+    .central-stage {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 18px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .stage-panel {
+      display: none;
+    }
+
+    .stage-panel.active {
+      display: block;
+      animation: panelStepIn 0.22s steps(3);
+    }
+
+    @keyframes panelStepIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .marker-section-title {
+      font-family: var(--font-marker);
+      font-size: 1.65rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      border-bottom: 3px solid var(--ink-color);
+      padding-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    [data-space="blackspace"] .marker-section-title {
+      border-color: var(--omori-red);
+    }
+
+    /* =====================================================================
+       HERO / WHITE SPACE STAGE + INTERACTIVE FEAR METER SIMULATOR (0-100)
+       ===================================================================== */
+    .whitespace-hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 26px;
+    }
+
+    .headspace-banner {
+      background: linear-gradient(135deg, #1a102e 0%, #2d1b4e 50%, #0f172a 100%);
+      border: 3px solid #ffffff;
+      padding: 16px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fear-meter-box {
+      border: 2px solid #ffffff;
+      padding: 14px;
+      margin-top: 16px;
+      background: #08080c;
+    }
+
+    .fear-slider {
+      width: 100%;
+      accent-color: var(--omori-red);
+      cursor: pointer;
+      margin: 10px 0;
+      height: 8px;
+    }
+
+    .fear-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      border: 1.5px solid #fff;
+      background: #000;
+    }
+
+    /* =====================================================================
+       POLAROID FRAMES FOR MOD FEATURES & EXPLORABLE DREAMSPACES
+       ===================================================================== */
+    .polaroid-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+
+    .polaroid-card {
+      background: #ffffff;
+      color: #000000;
+      border: 3px solid #000000;
+      padding: 14px 14px 18px;
+      box-shadow: 6px 6px 0 var(--ink-color);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.16s steps(2), box-shadow 0.16s steps(2);
+      cursor: pointer;
+    }
+
+    [data-space="blackspace"] .polaroid-card {
+      border-color: var(--omori-red);
+      box-shadow: 6px 6px 0 var(--omori-red);
+    }
+
+    .polaroid-card:nth-child(odd):hover {
+      transform: translateY(-5px) rotate(-1.3deg);
+      box-shadow: 10px 10px 0 var(--omori-red);
+    }
+
+    .polaroid-card:nth-child(even):hover {
+      transform: translateY(-5px) rotate(1.3deg);
+      box-shadow: 10px 10px 0 var(--omori-red);
+    }
+
+    .polaroid-art {
+      height: 175px;
+      border: 2.5px solid #000000;
+      margin-bottom: 12px;
+      overflow: hidden;
+      position: relative;
+      background: #0d0f18;
+    }
+
+    .polaroid-tag {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: #000;
+      color: #fff;
+      border: 1.5px solid #fff;
+      padding: 2px 7px;
+      font-size: 0.66rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .polaroid-title {
+      font-family: var(--font-marker);
+      font-size: 1.15rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+      color: #000000;
+    }
+
+    .polaroid-desc {
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: #262626;
+    }
+
+    /* =====================================================================
+       COMMANDS CONSOLE & DOWNLOAD SPECS TABLE
+       ===================================================================== */
+    .command-row {
+      border: 2px solid #ffffff;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #08080c;
+    }
+
+    .command-code {
+      font-weight: 800;
+      color: var(--headspace-cyan);
+      font-size: 0.9rem;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+
+    .spec-cell {
+      border: 2px solid #ffffff;
+      padding: 10px 12px;
+      background: #08080c;
+    }
+
+    .spec-label {
+      font-size: 0.68rem;
+      color: #999999;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .spec-val {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    /* =====================================================================
+       1:1 OMORI CORNER & MARGIN ROOM ELEMENTS:
+       - Bottom-Left Dangling Red Plug/Cord
+       - Right Margin Standing White Door Shortcut
+       - Bottom-Right White Space Room Mat (Laptop, Sketchbook, Tissue Box + Mewo)
+       - Bottom Center/Left RPG Dialogue Window with Typewriter & Red Hand
+       ===================================================================== */
+    .dangling-red-plug {
+      position: fixed;
+      bottom: 0;
+      left: 14px;
+      z-index: 25;
+      cursor: pointer;
+    }
+
+    .right-margin-door {
+      position: fixed;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 25;
+      cursor: pointer;
+      background: var(--bg-color);
+      border: 2.5px solid var(--ink-color);
+      padding: 8px 6px;
+      text-align: center;
+      box-shadow: 4px 4px 0 var(--ink-color);
+      transition: transform 0.15s steps(2);
+    }
+
+    .right-margin-door:hover {
+      transform: translateY(-50%) scale(1.06);
+      border-color: var(--omori-red);
+    }
+
+    /* Bottom-Right Room Mat + Mewo (1:1 omori-game.com/en) */
+    .whitespace-mat-cluster {
+      position: fixed;
+      bottom: 14px;
+      right: 18px;
+      z-index: 60;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .mewo-cat-trigger {
+      cursor: pointer;
+      text-align: center;
+      padding: 4px;
+      transition: transform 0.15s steps(2);
+    }
+
+    .mewo-cat-trigger:hover {
+      transform: translateY(-4px);
+    }
+
+    .whitespace-floor-mat {
+      background: #ffffff;
+      color: #000000;
+      border: 3px solid #000000;
+      box-shadow: 5px 5px 0 var(--ink-color);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    [data-space="blackspace"] .whitespace-floor-mat {
+      border-color: var(--omori-red);
+      box-shadow: 5px 5px 0 var(--omori-red);
+    }
+
+    .mat-item-btn {
+      background: transparent;
+      border: 1.5px solid transparent;
+      color: #000000;
+      padding: 4px 6px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.62rem;
+      font-weight: 800;
+    }
+
+    .mat-item-btn:hover {
+      border-color: var(--omori-red);
+      background: rgba(255, 26, 26, 0.08);
+    }
+
+    /* RPG Dialogue Box (Bottom-Left / Center) */
+    .omori-dialogue-box {
+      position: fixed;
+      bottom: 14px;
+      left: 72px;
+      width: min(560px, calc(100vw - 380px));
+      min-width: 300px;
+      z-index: 60;
+      background: #000000;
+      color: #ffffff;
+      border: 3px solid #000000;
+      box-shadow: inset 0 0 0 3px #ffffff, 0 8px 0 rgba(0,0,0,0.25);
+      padding: 12px 34px 12px 16px;
+      min-height: 86px;
+      cursor: pointer;
+    }
+
+    .dialogue-speaker {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--headspace-cyan);
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .dialogue-line {
+      font-size: 0.84rem;
+      line-height: 1.42;
+    }
+
+    .dialogue-pointer {
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      color: var(--omori-red);
+      font-size: 1.15rem;
+      animation: blinkHand 0.55s steps(2) infinite;
+    }
+
+    @keyframes blinkHand {
+      0% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+
+    /* =====================================================================
+       1:1 SKETCHBOOK & POLAROID LIGHTBOX OVERLAY
+       ===================================================================== */
+    .lightbox-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .lightbox-backdrop.open {
+      display: flex;
+    }
+
+    .sketchbook-viewer {
+      max-width: 620px;
+      width: 100%;
+    }
+
+    @media (max-width: 960px) {
+      .whitespace-hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .omori-dialogue-box {
+        left: 14px;
+        right: 14px;
+        width: auto;
+        bottom: 104px;
+      }
+      .right-margin-door {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FEAR METER VIGNETTE & SCANLINE OVERLAY -->
+  <div class="fear-overlay" aria-hidden="true"></div>
+
+  <!-- LURKING STALKER / SOMETHING EYES IN BLACK SPACE -->
+  <div class="stalker-eyes-layer" aria-hidden="true">
+    <svg class="something-eye" style="top:15%;left:6%;" width="86" height="136" viewBox="0 0 90 140">
+      <path d="M45 5 C15 45, 10 95, 25 135 C40 115, 50 115, 65 135 C80 95, 75 45, 45 5 Z" fill="#000" stroke="#ff1a1a" stroke-width="2.5"/>
+      <ellipse cx="45" cy="58" rx="16" ry="10" fill="#fff"/>
+      <circle cx="45" cy="58" r="6" fill="#000"/>
+    </svg>
+    <svg class="something-eye" style="top:58%;right:7%;animation-delay:1.3s;" width="86" height="136" viewBox="0 0 90 140">
+      <path d="M45 5 C15 45, 10 95, 25 135 C40 115, 50 115, 65 135 C80 95, 75 45, 45 5 Z" fill="#000" stroke="#ff1a1a" stroke-width="2.5"/>
+      <ellipse cx="45" cy="58" rx="16" ry="10" fill="#fff"/>
+      <circle cx="45" cy="58" r="6" fill="#000"/>
+    </svg>
+  </div>
+
+  <!-- =====================================================================
+       1:1 OMORI HEADER: HANGING BLACK LIGHTBULB + TITLE + RPG NAV TABS
+       ===================================================================== -->
+  <header class="omori-header">
+    <div class="lightbulb-hanger" data-action="pull-lightbulb" title="Pull the Black Lightbulb to shift between WHITE SPACE and BLACK SPACE">
+      <svg width="52" height="98" viewBox="0 0 52 98">
+        <line x1="26" y1="0" x2="26" y2="48" stroke="currentColor" stroke-width="3"/>
+        <rect x="19" y="46" width="14" height="8" fill="#000" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="26" cy="72" r="18" fill="#000000" stroke="currentColor" stroke-width="3"/>
+        <path d="M20 72 Q26 60 32 72" fill="none" stroke="#ffffff" stroke-width="2"/>
+      </svg>
+      <span class="bulb-caption" id="bulbModeText">[ 💡 WHITE SPACE // PULL BULB ]</span>
+    </div>
+
+    <h1 class="sketch-logo-title">D R E A M &nbsp; S T A L K E R</h1>
+    <div class="sketch-subbrand">A LIMINAL FABRIC MOD // BY KURU STUDIO</div>
+
+    <!-- 1:1 OMORI Retro RPG Navigation Bar (Matches dream-stalker-site links + White Space) -->
+    <nav class="omori-nav" aria-label="Main Navigation">
+      <button type="button" class="omori-nav-btn active" data-action="switch-stage" data-stage="whitespace">
+        WHITE SPACE
+      </button>
+      <button type="button" class="omori-nav-btn" data-action="switch-stage" data-stage="features">
+        FEATURES
+      </button>
+      <button type="button" class="omori-nav-btn" data-action="switch-stage" data-stage="dreamspaces">
+        DREAMSPACES
+      </button>
+      <button type="button" class="omori-nav-btn" data-action="switch-stage" data-stage="commands">
+        COMMANDS
+      </button>
+      <button type="button" class="omori-nav-btn" data-action="switch-stage" data-stage="audio">
+        AUDIO
+      </button>
+      <button type="button" class="omori-nav-btn" data-action="switch-stage" data-stage="download" style="box-shadow:inset 0 0 0 2px var(--omori-red);">
+        DOWNLOAD MOD
+      </button>
+    </nav>
+  </header>
+
+  <!-- =====================================================================
+       CENTRAL VIEWPORT STAGE (Replaces content dynamically like omori-game.com/en)
+       ===================================================================== -->
+  <main class="central-stage">
+
+    <!-- STAGE 1: WHITE SPACE / HERO + FEAR METER SIMULATOR -->
+    <section id="stage-whitespace" class="stage-panel active">
+      <div class="whitespace-hero-grid">
+        <div class="rpg-window">
+          <div class="headspace-banner">
+            <div style="font-size:0.7rem;color:var(--headspace-cyan);font-weight:800;letter-spacing:0.12em;margin-bottom:4px;">
+              MINECRAFT 1.21.8 • FABRIC • JAVA 21
+            </div>
+            <h2 style="font-family:var(--font-marker);font-size:1.55rem;line-height:1.2;color:#fff;">
+              YOU ARE BEING WATCHED IN YOUR DREAMS
+            </h2>
+          </div>
+
+          <p style="font-size:0.88rem;line-height:1.55;margin-bottom:16px;color:#e4e4e7;">
+            "Dream Stalker introduces a terrifying, persistent entity that stalks your Minecraft 1.21.8 Fabric server. It feeds on fear, bends reality, and manifests in surreal dreamspaces."
+          </p>
+
+          <!-- Interactive Fear Meter Simulator (Verbatim from dream-stalker-site + OMORI Emotion States) -->
+          <div class="fear-meter-box">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+              <span style="font-size:0.76rem;font-weight:800;color:var(--headspace-pink);">
+                DYNAMIC FEAR SYSTEM SIMULATOR (0–100)
+              </span>
+              <span class="fear-badge" id="fearStatusBadge" style="color:#4ade80;">
+                FEAR: 15 // CALM (NEUTRAL)
+              </span>
+            </div>
+            <input
+              type="range"
+              id="fearRangeSlider"
+              class="fear-slider"
+              min="0"
+              max="100"
+              value="15"
+            />
+            <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:#999;">
+              <span>0: Calm</span>
+              <span>26: Unsettled</span>
+              <span>51: Paranoid</span>
+              <span>76+: Terror (Black Space)</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;">
+            <button type="button" class="omori-btn red-cta" data-action="switch-stage" data-stage="download">
+              Download Mod v1.0.0
+            </button>
+            <button type="button" class="omori-btn" data-action="open-sketchbook">
+              Inspect Sketchbook
+            </button>
+            <a href="https://github.com/rakhakaindra83-hub" target="_blank" rel="noopener" class="omori-btn">
+              Kuru Studio Portfolio
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Side: Iconic Standing White Door & Liminal House Sketch -->
+        <div class="sketch-frame" style="text-align:center;padding:28px 18px;">
+          <div style="font-size:0.72rem;font-weight:800;letter-spacing:0.1em;margin-bottom:12px;">
+            // THRESHOLD DOORWAY //
+          </div>
+          <div style="cursor:pointer;display:inline-block;" data-action="enter-door" title="Click the White Door to enter Explorable Dreamspaces">
+            <svg width="150" height="220" viewBox="0 0 150 220">
+              <!-- Sketchy Floor Shadow -->
+              <ellipse cx="75" cy="205" rx="60" ry="9" fill="rgba(0,0,0,0.2)"/>
+              <!-- Standing White Door -->
+              <rect x="35" y="14" width="80" height="190" fill="#ffffff" stroke="#000000" stroke-width="4"/>
+              <rect x="47" y="28" width="56" height="62" fill="none" stroke="#000000" stroke-width="2.5"/>
+              <rect x="47" y="104" width="56" height="78" fill="none" stroke="#000000" stroke-width="2.5"/>
+              <circle cx="95" cy="110" r="4.5" fill="#000000"/>
+              <!-- Lurking Stalker Silhouette Behind Door Threshold -->
+              <circle cx="22" cy="70" r="4" fill="#ff1a1a"/>
+              <circle cx="30" cy="70" r="4" fill="#ff1a1a"/>
+            </svg>
+          </div>
+          <div style="font-family:var(--font-marker);font-size:1.05rem;font-weight:900;margin-top:8px;">
+            "A faint shadow stands behind the door..."
+          </div>
+          <p style="font-size:0.75rem;color:var(--muted-color);margin-top:4px;">
+            Klik pintu putih untuk masuk ke <strong>Dreamspaces</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 2: MOD FEATURES (#features from dream-stalker-site in OMORI Polaroids) -->
+    <section id="stage-features" class="stage-panel">
+      <div class="marker-section-title">
+        <span>MOD FEATURES // CORE MECHANICS:</span>
+        <span style="font-family:var(--font-pixel);font-size:0.78rem;">4 VERIFIED MODULES</span>
+      </div>
+
+      <div class="polaroid-grid">
+        <!-- Feature 1: Persistent Stalker -->
+        <article class="polaroid-card" data-action="inspect-feature" data-title="Persistent Stalker" data-desc="An intelligent entity that follows players across distances, observing from thresholds and vanishing when approached directly.">
+          <div class="polaroid-art">
+            <span class="polaroid-tag">ENTITY AI</span>
+            <svg viewBox="0 0 240 175" width="100%" height="100%">
+              <rect width="240" height="175" fill="#090a10"/>
+              <path d="M95 175 L105 55 C105 32, 135 32, 135 55 L145 175 Z" fill="#000" stroke="#fff" stroke-width="2.5"/>
+              <circle cx="113" cy="56" r="4" fill="#ff1a1a"/>
+              <circle cx="127" cy="56" r="4" fill="#ff1a1a"/>
+              <text x="120" y="158" text-anchor="middle" fill="#fff" font-family="monospace" font-size="10">THRESHOLD OBSERVER</text>
+            </svg>
+          </div>
+          <h3 class="polaroid-title">1. Persistent Stalker</h3>
+          <p class="polaroid-desc">
+            An intelligent entity that follows players across distances, observing from thresholds and vanishing when approached directly.
+          </p>
+        </article>
+
+        <!-- Feature 2: Dynamic Fear System -->
+        <article class="polaroid-card" data-action="inspect-feature" data-title="Dynamic Fear System" data-desc="Tracks player fear from 0 to 100. Higher fear causes visual distortions, auditory hallucinations, and sudden jumpscares.">
+          <div class="polaroid-art">
+            <span class="polaroid-tag">FEAR 0–100</span>
+            <svg viewBox="0 0 240 175" width="100%" height="100%">
+              <rect width="240" height="175" fill="#14080e"/>
+              <ellipse cx="120" cy="85" rx="58" ry="34" fill="#fff" stroke="#ff1a1a" stroke-width="3"/>
+              <circle cx="120" cy="85" r="18" fill="#000"/>
+              <circle cx="120" cy="85" r="7" fill="#ff1a1a"/>
+              <text x="120" y="158" text-anchor="middle" fill="#ff75c3" font-family="monospace" font-size="10">HALLUCINATION ENGINE</text>
+            </svg>
+          </div>
+          <h3 class="polaroid-title">2. Dynamic Fear System</h3>
+          <p class="polaroid-desc">
+            Tracks player fear from 0 to 100. Higher fear causes visual distortions, auditory hallucinations, and sudden jumpscares.
+          </p>
+        </article>
+
+        <!-- Feature 3: Surreal Dreamspaces -->
+        <article class="polaroid-card" data-action="inspect-feature" data-title="Surreal Dreamspaces" data-desc="Transport players into liminal dimensions with eerie, infinite architecture and unsettling atmosphere.">
+          <div class="polaroid-art">
+            <span class="polaroid-tag">DIMENSIONS</span>
+            <svg viewBox="0 0 240 175" width="100%" height="100%">
+              <rect width="240" height="175" fill="#0c1618"/>
+              <rect x="40" y="25" width="160" height="110" fill="none" stroke="#00f3ff" stroke-width="2"/>
+              <rect x="70" y="45" width="100" height="70" fill="none" stroke="#fff" stroke-width="2"/>
+              <rect x="95" y="62" width="50" height="36" fill="#000" stroke="#ff1a1a" stroke-width="2"/>
+              <text x="120" y="158" text-anchor="middle" fill="#00f3ff" font-family="monospace" font-size="10">LIMINAL ARCHITECTURE</text>
+            </svg>
+          </div>
+          <h3 class="polaroid-title">3. Surreal Dreamspaces</h3>
+          <p class="polaroid-desc">
+            Transport players into liminal dimensions with eerie, infinite architecture and unsettling atmosphere.
+          </p>
+        </article>
+
+        <!-- Feature 4: Fabric 1.21.8 Ready -->
+        <article class="polaroid-card" data-action="inspect-feature" data-title="Fabric 1.21.8 Ready" data-desc="Built natively for Fabric Minecraft 1.21.8 running on Java 21 with lightweight performance overhead.">
+          <div class="polaroid-art">
+            <span class="polaroid-tag">JAVA 21</span>
+            <svg viewBox="0 0 240 175" width="100%" height="100%">
+              <rect width="240" height="175" fill="#12101b"/>
+              <rect x="75" y="35" width="90" height="90" fill="#000" stroke="#9d4edd" stroke-width="3"/>
+              <text x="120" y="86" text-anchor="middle" fill="#fff" font-family="monospace" font-size="16" font-weight="900">1.21.8</text>
+              <text x="120" y="158" text-anchor="middle" fill="#9d4edd" font-family="monospace" font-size="10">FABRIC NATIVE MOD</text>
+            </svg>
+          </div>
+          <h3 class="polaroid-title">4. Fabric 1.21.8 Ready</h3>
+          <p class="polaroid-desc">
+            Built natively for Fabric Minecraft 1.21.8 running on Java 21 with lightweight performance overhead.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- STAGE 3: EXPLORABLE DREAMSPACES (#dreamspaces from dream-stalker-site) -->
+    <section id="stage-dreamspaces" class="stage-panel">
+      <div class="marker-section-title">
+        <span>EXPLORABLE DREAMSPACES // POLAROID ARCHIVE:</span>
+        <span style="font-family:var(--font-pixel);font-size:0.78rem;">CLICK POLAROID TO TELEPORT</span>
+      </div>
+
+      <div class="polaroid-grid">
+        <!-- Dreamspace 1: Mossy Rooms -->
+        <article class="polaroid-card" data-action="teleport-dream" data-map="mossy_rooms" data-title="Mossy Rooms" data-lore="An endless labyrinth of damp, mossy walls and dim fluorescent lighting.">
+          <div class="polaroid-art">
+            <span class="polaroid-tag">MAP: mossy_rooms</span>
+            <svg viewBox="0 0 240 175" width="100%" height="100%">
+              <rect width="240" height="175" fill="#0d1912"/>
+              <line x1="0" y1="30" x2="240" y2="30" stroke="#4ade80" stroke-width="2" stroke-dasharray="8 6"/>
+              <rect x="45" y="45" width="45" height="95" fill="#14291d" stroke="#4ade80" stroke-width="2"/>
+              <rect x="115" y="55" width="75" height="85" fill="#09120c" stroke="#fff" stroke-width="2"/>
+              <text x="120" y="160" text-anchor="middle" fill="#4ade80" font-family="monospace" font-size="10">DAMP FLUORESCENT LABYRINTH</text>
+            </svg>
+          </div>
+          <h3 class="polaroid-title">Mossy Rooms</h3>
+          <p class="polaroid-desc">
+            An endless labyrinth of damp, mossy walls and dim fluorescent lighting.
+          </p>
+        </article>
+
+        <!-- Dreamspace 2: Motel Treats -->
+        <article class="polaroid-card" data-action="teleport-dream" data-map="motel_treats" data-title="Motel Treats" data-lore="A roadside motel trapped in perpetual dusk, where corridors stretch infinitely.">
+          <div class="polaroid-art">
+            <span class="polaroid-tag">MAP: motel_treats</span>
+            <svg viewBox="0 0 240 175" width="100%" height="100%">
+              <rect width="240" height="175" fill="#1c1026"/>
+              <circle cx="185" cy="42" r="18" fill="#ff75c3" opacity="0.8"/>
+              <rect x="30" y="70" width="180" height="65" fill="#0d0714" stroke="#ff75c3" stroke-width="2.5"/>
+              <rect x="50" y="85" width="24" height="32" fill="#fde047"/>
+              <rect x="108" y="85" width="24" height="32" fill="#000" stroke="#fff"/>
+              <rect x="165" y="85" width="24" height="32" fill="#fde047"/>
+              <text x="120" y="160" text-anchor="middle" fill="#ff75c3" font-family="monospace" font-size="10">PERPETUAL DUSK CORRIDORS</text>
+            </svg>
+          </div>
+          <h3 class="polaroid-title">Motel Treats</h3>
+          <p class="polaroid-desc">
+            A roadside motel trapped in perpetual dusk, where corridors stretch infinitely.
+          </p>
+        </article>
+
+        <!-- Dreamspace 3: Lone Theatre -->
+        <article class="polaroid-card" data-action="teleport-dream" data-map="lone_theatre" data-title="Lone Theatre" data-lore="An abandoned movie theatre playing silent, distorted memory reels.">
+          <div class="polaroid-art">
+            <span class="polaroid-tag">MAP: lone_theatre</span>
+            <svg viewBox="0 0 240 175" width="100%" height="100%">
+              <rect width="240" height="175" fill="#140709"/>
+              <rect x="48" y="24" width="144" height="82" fill="#ffffff" stroke="#ff1a1a" stroke-width="3"/>
+              <circle cx="120" cy="65" r="22" fill="#000"/>
+              <circle cx="120" cy="65" r="7" fill="#fff"/>
+              <text x="120" y="160" text-anchor="middle" fill="#ff1a1a" font-family="monospace" font-size="10">SILENT MEMORY REELS</text>
+            </svg>
+          </div>
+          <h3 class="polaroid-title">Lone Theatre</h3>
+          <p class="polaroid-desc">
+            An abandoned movie theatre playing silent, distorted memory reels.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- STAGE 4: COMMANDS & CONTROLS (#commands from dream-stalker-site) -->
+    <section id="stage-commands" class="stage-panel">
+      <div class="marker-section-title">
+        <span>COMMANDS &amp; ADMIN CONTROLS:</span>
+        <span style="font-family:var(--font-pixel);font-size:0.78rem;">CLICK COMMAND TO SIMULATE</span>
+      </div>
+
+      <div class="rpg-window">
+        <p style="font-size:0.84rem;color:#ccc;margin-bottom:14px;">
+          Gunakan perintah konsol berikut di server Fabric 1.21.8 kamu, atau klik tombol <strong>[ EXECUTE ]</strong> untuk mencoba efeknya langsung di halaman ini:
+        </p>
+
+        <div class="command-row">
+          <div>
+            <div class="command-code">/stalker summon</div>
+            <div style="font-size:0.78rem;color:#bbb;">Summons the Stalker entity near a specified player.</div>
+          </div>
+          <button type="button" class="omori-btn red-cta" data-action="run-cmd" data-cmd="summon">
+            EXECUTE
+          </button>
+        </div>
+
+        <div class="command-row">
+          <div>
+            <div class="command-code">/stalker fear &lt;0-100&gt;</div>
+            <div style="font-size:0.78rem;color:#bbb;">Sets the current player fear level manually (0 to 100 scale).</div>
+          </div>
+          <button type="button" class="omori-btn" data-action="run-cmd" data-cmd="fear95">
+            SET FEAR 95
+          </button>
+        </div>
+
+        <div class="command-row">
+          <div>
+            <div class="command-code">/stalker dream &lt;map&gt;</div>
+            <div style="font-size:0.78rem;color:#bbb;">Teleports target player into a chosen Dreamspace (<code>mossy_rooms</code>, <code>motel_treats</code>, <code>lone_theatre</code>).</div>
+          </div>
+          <button type="button" class="omori-btn" data-action="run-cmd" data-cmd="dream">
+            TELEPORT
+          </button>
+        </div>
+
+        <div class="command-row">
+          <div>
+            <div class="command-code">/stalker shift</div>
+            <div style="font-size:0.78rem;color:#bbb;">Triggers an immediate reality shift and illusion cycle.</div>
+          </div>
+          <button type="button" class="omori-btn red-cta" data-action="run-cmd" data-cmd="shift">
+            REALITY SHIFT
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 5: DREAMCORE AUDIO PLAYER (#audio from dream-stalker-site) -->
+    <section id="stage-audio" class="stage-panel">
+      <div class="marker-section-title">
+        <span>DREAMCORE AUDIO PLAYER // WHITE SPACE TAPE:</span>
+        <span style="font-family:var(--font-pixel);font-size:0.78rem;">assets/dreamcore.mp3</span>
+      </div>
+
+      <div class="rpg-window">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:16px;">
+          <div>
+            <div style="font-size:0.74rem;color:var(--headspace-cyan);font-weight:800;">TRACK INDICATOR:</div>
+            <div style="font-size:1.1rem;font-weight:900;">assets/dreamcore.mp3 (White Space &amp; Liminal Synth)</div>
+            <div style="font-size:0.78rem;color:#aaa;margin-top:2px;">
+              Ambient background player controller with built-in Web Audio dreamcore generator fallback.
+            </div>
+          </div>
+          <button type="button" class="omori-btn red-cta" data-action="toggle-audio" id="audioPlayBtn">
+            PLAY / PAUSE BGM
+          </button>
+        </div>
+
+        <div style="border:2px solid #fff;padding:12px;background:#08080c;">
+          <label style="font-size:0.75rem;font-weight:800;display:block;margin-bottom:6px;">
+            VOLUME CONTROL (<span id="volLabel">70%</span>)
+          </label>
+          <input type="range" id="audioVolSlider" min="0" max="100" value="70" class="fear-slider" />
+        </div>
+      </div>
+    </section>
+
+    <!-- STAGE 6: DOWNLOAD DREAM STALKER (#download from dream-stalker-site) -->
+    <section id="stage-download" class="stage-panel">
+      <div class="marker-section-title">
+        <span>DOWNLOAD DREAM STALKER // OFFICIAL RELEASE:</span>
+        <span style="font-family:var(--font-pixel);font-size:0.78rem;">v1.0.0 STABLE</span>
+      </div>
+
+      <div class="rpg-window">
+        <h3 style="font-family:var(--font-marker);font-size:1.45rem;margin-bottom:6px;color:var(--headspace-cyan);">
+          dreamstalker-1.0.0.jar
+        </h3>
+        <p style="font-size:0.84rem;color:#ccc;margin-bottom:14px;">
+          Letakkan file <code>dreamstalker-1.0.0.jar</code> ke dalam folder <code>.minecraft/mods</code> pada instalasi Fabric 1.21.8 (Java 21).
+        </p>
+
+        <div class="specs-grid">
+          <div class="spec-cell">
+            <span class="spec-label">File Name</span>
+            <span class="spec-val">dreamstalker-1.0.0.jar</span>
+          </div>
+          <div class="spec-cell">
+            <span class="spec-label">Mod Loader</span>
+            <span class="spec-val">Fabric</span>
+          </div>
+          <div class="spec-cell">
+            <span class="spec-label">Target Version</span>
+            <span class="spec-val">Minecraft 1.21.8</span>
+          </div>
+          <div class="spec-cell">
+            <span class="spec-label">Runtime</span>
+            <span class="spec-val">Java 21</span>
+          </div>
+          <div class="spec-cell">
+            <span class="spec-label">Author</span>
+            <span class="spec-val">kuru studio</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button type="button" class="omori-btn red-cta" data-action="trigger-download">
+            Download dreamstalker-1.0.0.jar
+          </button>
+          <a href="https://github.com/rakhakaindra83-hub/dream-stalker-site" target="_blank" rel="noopener" class="omori-btn">
+            View GitHub Repository
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       1:1 OMORI CORNER & MARGIN INTERACTIVE ROOM OBJECTS
+       ===================================================================== -->
+
+  <!-- Bottom-Left Dangling Red Plug / Cord -->
+  <div class="dangling-red-plug" data-action="click-plug" title="Dangling Red Cord // Click to trigger static pulse">
+    <svg width="46" height="90" viewBox="0 0 46 90">
+      <path d="M18 90 C18 55, 28 45, 22 20" fill="none" stroke="#ff1a1a" stroke-width="4"/>
+      <rect x="14" y="8" width="16" height="14" fill="#ff1a1a" stroke="#000" stroke-width="2"/>
+      <line x1="18" y1="2" x2="18" y2="8" stroke="#000" stroke-width="2.5"/>
+      <line x1="26" y1="2" x2="26" y2="8" stroke="#000" stroke-width="2.5"/>
+    </svg>
+  </div>
+
+  <!-- Right Margin Standing White Door Shortcut -->
+  <div class="right-margin-door" data-action="switch-stage" data-stage="whitespace" title="Return to White Space (/en/whitespace)">
+    <svg width="28" height="44" viewBox="0 0 28 44">
+      <rect x="4" y="2" width="20" height="40" fill="#fff" stroke="#000" stroke-width="2.5"/>
+      <circle cx="20" cy="22" r="2" fill="#000"/>
+    </svg>
+    <div style="font-size:0.55rem;font-weight:900;margin-top:2px;">DOOR</div>
+  </div>
+
+  <!-- Bottom-Left / Center RPG Typewriter Dialogue Window -->
+  <aside class="omori-dialogue-box" data-action="cycle-dialogue" title="Click dialogue box for next lore message">
+    <div class="dialogue-speaker" id="dialogueSpeaker">WHITE SPACE // THRESHOLD LOG</div>
+    <div class="dialogue-line" id="dialogueText">
+      Welcome to DREAM STALKER (OMORI 1:1 Edition). Klik Mewo, Sketchbook, Laptop, Tissue Box di pojok kanan bawah, atau tarik Bohlam Hitam di atas!
+    </div>
+    <div class="dialogue-pointer">☞</div>
+  </aside>
+
+  <!-- Bottom-Right Room Mat (Laptop, Sketchbook, Tissue Box + Mewo the Cat) -->
+  <div class="whitespace-mat-cluster">
+    <!-- Mewo the Cat sitting adjacent to the mat -->
+    <div class="mewo-cat-trigger" data-action="click-mewo" title="Click Mewo the Cat">
+      <svg width="58" height="50" viewBox="0 0 58 50">
+        <polygon points="12,20 17,5 25,16" fill="#000"/>
+        <polygon points="46,20 41,5 33,16" fill="#000"/>
+        <ellipse cx="29" cy="28" rx="18" ry="14" fill="#000" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="22" cy="26" r="3.5" fill="#fff"/>
+        <circle cx="36" cy="26" r="3.5" fill="#fff"/>
+        <circle cx="22" cy="26" r="1.5" fill="#000"/>
+        <circle cx="36" cy="26" r="1.5" fill="#000"/>
+        <path d="M45 34 Q55 26 51 16" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>
+      <div style="font-size:0.62rem;font-weight:900;background:#000;color:#fff;padding:1px 5px;">MEWO</div>
+    </div>
+
+    <!-- Square White Space Room Mat -->
+    <div class="whitespace-floor-mat" aria-label="White Space Room Mat">
+      <button type="button" class="mat-item-btn" data-action="switch-stage" data-stage="commands" title="Open Laptop (/stalker Commands)">
+        <svg width="34" height="30" viewBox="0 0 34 30">
+          <rect x="6" y="4" width="22" height="15" fill="#000"/>
+          <rect x="8" y="6" width="18" height="11" fill="#fff"/>
+          <polygon points="3,20 31,20 33,26 1,26" fill="#000"/>
+        </svg>
+        <span>LAPTOP</span>
+      </button>
+
+      <button type="button" class="mat-item-btn" data-action="open-sketchbook" title="Open Dream Stalker Sketchbook">
+        <svg width="34" height="30" viewBox="0 0 34 30">
+          <rect x="7" y="3" width="20" height="24" fill="#fff" stroke="#000" stroke-width="2.5"/>
+          <path d="M12 10 L22 20 M22 10 L12 20" stroke="#ff1a1a" stroke-width="2"/>
+        </svg>
+        <span>SKETCH</span>
+      </button>
+
+      <button type="button" class="mat-item-btn" data-action="click-tissues" title="Pull Tissue to calm Fear back to 0">
+        <svg width="34" height="30" viewBox="0 0 34 30">
+          <rect x="6" y="13" width="22" height="13" fill="#fff" stroke="#000" stroke-width="2.5"/>
+          <path d="M13 13 C12 4, 22 4, 21 13" fill="#fff" stroke="#000" stroke-width="2"/>
+        </svg>
+        <span>TISSUES</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       1:1 SKETCHBOOK & POLAROID LIGHTBOX OVERLAY
+       ===================================================================== -->
+  <div class="lightbox-backdrop" id="lightboxBackdrop" data-action="close-lightbox-bg">
+    <div class="rpg-window sketchbook-viewer" id="lightboxBody"></div>
+  </div>
+
+  <script>
+    /* =====================================================================
+       WEB AUDIO DREAMCORE & OMORI 8-BIT SYNTHESIZER
+       ===================================================================== */
+    let audioCtx = null;
+    let bgmPlaying = false;
+    let bgmInterval = null;
+    let masterVolume = 0.7;
+
+    function getAudioCtx() {
+      try {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (Ctx) audioCtx = new Ctx();
+        }
+        if (audioCtx && audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+      } catch (e) {}
+      return audioCtx;
+    }
+
+    function sfxBlip(freq = 720) {
+      try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "square";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.02 * masterVolume, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.035);
+      } catch (e) {}
+    }
+
+    function sfxSelect() {
+      try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "square";
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.045);
+        gain.gain.setValueAtTime(0.035 * masterVolume, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.11);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.11);
+      } catch (e) {}
+    }
+
+    function sfxStalkerDrone() {
+      try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(110, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(65, ctx.currentTime + 0.28);
+        gain.gain.setValueAtTime(0.05 * masterVolume, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.28);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.28);
+      } catch (e) {}
+    }
+
+    function toggleDreamcoreBGM() {
+      const ctx = getAudioCtx();
+      bgmPlaying = !bgmPlaying;
+      const btn = document.getElementById("audioPlayBtn");
+      if (btn) btn.textContent = bgmPlaying ? "PAUSE BGM (PLAYING)" : "PLAY / PAUSE BGM";
+
+      if (bgmInterval) clearInterval(bgmInterval);
+      if (!bgmPlaying || !ctx) return;
+
+      const notes = [329.63, 493.88, 440.0, 329.63, 523.25, 493.88, 293.66, 440.0, 392.0];
+      let step = 0;
+      bgmInterval = setInterval(() => {
+        try {
+          if (!bgmPlaying || !audioCtx) return;
+          const isBlack = document.documentElement.getAttribute("data-space") === "blackspace";
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = isBlack ? "sawtooth" : "sine";
+          const f = notes[step % notes.length];
+          osc.frequency.setValueAtTime(isBlack ? f * 0.5 : f, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.02 * masterVolume, audioCtx.currentTime + 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime + 0.8);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.82);
+          step++;
+        } catch (e) {}
+      }, 900);
+    }
+
+    /* =====================================================================
+       TYPEWRITER RPG DIALOGUE ENGINE
+       ===================================================================== */
+    let typeTimer = null;
+    function typeDialogue(speaker, text) {
+      document.getElementById("dialogueSpeaker").textContent = speaker;
+      const lineEl = document.getElementById("dialogueText");
+      if (typeTimer) clearInterval(typeTimer);
+      lineEl.textContent = "";
+      let idx = 0;
+      typeTimer = setInterval(() => {
+        if (idx < text.length) {
+          lineEl.textContent += text.charAt(idx);
+          if (idx % 3 === 0) sfxBlip(680 + (idx % 4) * 30);
+          idx++;
+        } else {
+          clearInterval(typeTimer);
+        }
+      }, 15);
+    }
+
+    /* =====================================================================
+       DYNAMIC FEAR METER (0-100) + WHITE SPACE <-> BLACK SPACE SYNC
+       ===================================================================== */
+    function updateFearLevel(val, announce = false) {
+      const fear = Math.max(0, Math.min(100, parseInt(val, 10) || 0));
+      const slider = document.getElementById("fearRangeSlider");
+      if (slider && parseInt(slider.value, 10) !== fear) slider.value = fear;
+
+      document.documentElement.style.setProperty("--fear-vignette", (fear / 100).toFixed(2));
+
+      let label = "CALM (NEUTRAL)";
+      let color = "#4ade80";
+      if (fear >= 76) {
+        label = "TERROR (AFRAID // BLACK SPACE)";
+        color = "#ff1a1a";
+        setSpaceMode("blackspace", false);
+      } else if (fear >= 51) {
+        label = "PARANOID (STRESSED OUT)";
+        color = "#f97316";
+      } else if (fear >= 26) {
+        label = "UNSETTLED (UNEASY)";
+        color = "#fde047";
+      } else {
+        setSpaceMode("whitespace", false);
+      }
+
+      const badge = document.getElementById("fearStatusBadge");
+      if (badge) {
+        badge.textContent = `FEAR: ${fear} // ${label}`;
+        badge.style.color = color;
+      }
+
+      if (announce) {
+        typeDialogue("DYNAMIC FEAR SYSTEM", `Fear level diatur ke ${fear}/100 [${label}].`);
+      }
+    }
+
+    function setSpaceMode(mode, triggerFlicker = true) {
+      const html = document.documentElement;
+      if (html.getAttribute("data-space") === mode && !triggerFlicker) return;
+      html.setAttribute("data-space", mode);
+      document.getElementById("bulbModeText").textContent =
+        mode === "blackspace" ? "[ 💡 BLACK SPACE // CLICK TO RETURN ]" : "[ 💡 WHITE SPACE // PULL BULB ]";
+
+      if (triggerFlicker) {
+        document.body.classList.remove("reality-flicker");
+        void document.body.offsetWidth;
+        document.body.classList.add("reality-flicker");
+      }
+    }
+
+    /* =====================================================================
+       SKETCHBOOK PAGES (1:1 OMORI Sketchbook Modal with Red Hand Arrows)
+       ===================================================================== */
+    const SKETCH_PAGES = [
+      {
+        num: "SKETCH 01 // THE PERSISTENT STALKER",
+        title: "Threshold Observer",
+        caption: "It never attacks first. It stands at the edge of your render distance and vanishes the moment your crosshair touches it.",
+        stroke: "#ff1a1a"
+      },
+      {
+        num: "SKETCH 02 // MOSSY ROOMS & MOTEL TREATS",
+        title: "Liminal Dreamspaces",
+        caption: "When your Fear exceeds 75, sleeping in a bed no longer skips the night—it pulls you into Mossy Rooms or Motel Treats.",
+        stroke: "#00f3ff"
+      },
+      {
+        num: "SKETCH 03 // LONE THEATRE MEMORY REELS",
+        title: "Silent Projections",
+        caption: "An abandoned theatre where distorted reels of your previous Minecraft worlds play endlessly on the screen.",
+        stroke: "#9d4edd"
+      }
+    ];
+    let sketchIdx = 0;
+
+    function openSketchbookModal() {
+      const p = SKETCH_PAGES[sketchIdx];
+      const body = document.getElementById("lightboxBody");
+      body.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #fff;padding-bottom:8px;margin-bottom:14px;">
+          <span style="font-weight:800;color:var(--omori-red);">📕 DREAM STALKER SKETCHBOOK (${sketchIdx + 1}/${SKETCH_PAGES.length})</span>
+          <button type="button" class="omori-btn" data-action="close-lightbox">CLOSE [X]</button>
+        </div>
+        <div style="background:#ffffff;color:#000000;border:3px solid #000;padding:20px;text-align:center;margin-bottom:14px;">
+          <div style="font-size:0.72rem;font-weight:900;letter-spacing:0.1em;margin-bottom:8px;">${p.num}</div>
+          <svg viewBox="0 0 340 155" width="100%" height="155" style="border:2px dashed #000;margin-bottom:12px;background:#fff;">
+            <path d="M25 130 Q95 15 170 90 T315 35" fill="none" stroke="${p.stroke}" stroke-width="3.5"/>
+            <ellipse cx="170" cy="75" rx="45" ry="26" fill="none" stroke="#000" stroke-width="3"/>
+            <circle cx="170" cy="75" r="11" fill="#000"/>
+            <circle cx="170" cy="75" r="4" fill="#ff1a1a"/>
+          </svg>
+          <h4 style="font-family:var(--font-marker);font-size:1.3rem;margin-bottom:6px;">${p.title}</h4>
+          <p style="font-size:0.84rem;color:#222;">${p.caption}</p>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <button type="button" class="omori-btn" data-action="sketch-prev">PREV PAGE</button>
+          <button type="button" class="omori-btn red-cta" data-action="sketch-next">NEXT PAGE</button>
+        </div>
+      `;
+      document.getElementById("lightboxBackdrop").classList.add("open");
+    }
+
+    function switchStage(stageName) {
+      document.querySelectorAll(".stage-panel").forEach(p => p.classList.remove("active"));
+      const target = document.getElementById("stage-" + stageName);
+      if (target) target.classList.add("active");
+      document.querySelectorAll(".omori-nav-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.stage === stageName);
+      });
+    }
+
+    /* =====================================================================
+       CENTRALIZED CLICK & HOVER DELEGATION
+       ===================================================================== */
+    const MEWO_LINES = [
+      "MEWO: 'Meow? (Waiting for something to happen? ...Or is the Dream Stalker watching you?)'",
+      "MEWO: 'Purrrr... (Mewo feels safe in White Space, as long as Fear stays below 75.)'",
+      "MEWO: 'Meow! (Try typing /stalker shift in the Commands tab to bend reality!)'"
+    ];
+    let mewoCount = 0;
+
+    const LORE_TIPS = [
+      "LORE LOG #1: The Persistent Stalker only appears at the edge of your field of view and vanishes when approached.",
+      "LORE LOG #2: Use '/stalker dream mossy_rooms' to teleport directly into the damp fluorescent labyrinth.",
+      "LORE LOG #3: Built natively for Fabric Minecraft 1.21.8 (Java 21) by Kuru Studio."
+    ];
+    let tipCount = 0;
+
+    document.addEventListener("mouseover", (e) => {
+      if (e.target.closest("button, .polaroid-card, .mewo-cat-trigger, .lightbulb-hanger")) {
+        sfxBlip(760);
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      const el = e.target.closest("[data-action]");
+      if (!el) return;
+      const action = el.dataset.action;
+
+      if (action === "pull-lightbulb") {
+        sfxStalkerDrone();
+        const next = document.documentElement.getAttribute("data-space") === "whitespace" ? "blackspace" : "whitespace";
+        setSpaceMode(next, true);
+        updateFearLevel(next === "blackspace" ? 92 : 15, false);
+        typeDialogue(
+          next === "blackspace" ? "BLACK SPACE // TERROR" : "WHITE SPACE // CALM",
+          next === "blackspace"
+            ? "You pulled the Black Lightbulb. Darkness swallows the room... YOU ARE BEING WATCHED IN YOUR DREAMS."
+            : "Light returns to White Space. Your Fear level subsides to 15 (Calm)."
+        );
+      } else if (action === "switch-stage") {
+        sfxSelect();
+        switchStage(el.dataset.stage);
+        typeDialogue("OMORI // NAVIGATION", `Entered [${el.dataset.stage.toUpperCase()}] stage.`);
+      } else if (action === "enter-door") {
+        sfxSelect();
+        switchStage("dreamspaces");
+        typeDialogue("WHITE DOOR", "You opened the white door and stepped into the Explorable Dreamspaces...");
+      } else if (action === "click-mewo") {
+        sfxSelect();
+        const msg = MEWO_LINES[mewoCount % MEWO_LINES.length];
+        mewoCount++;
+        typeDialogue("MEWO // WHITE SPACE CAT", msg);
+      } else if (action === "click-tissues") {
+        sfxSelect();
+        updateFearLevel(0, false);
+        typeDialogue("TISSUE BOX", "You wiped your tears with a tissue. Your Fear level has been reset to 0 (CALM).");
+      } else if (action === "click-plug") {
+        sfxStalkerDrone();
+        updateFearLevel(65, false);
+        typeDialogue("DANGLING RED CORD", "A low electrical hum vibrates through the floor... Fear increased to 65 (PARANOID).");
+      } else if (action === "open-sketchbook") {
+        sfxSelect();
+        openSketchbookModal();
+        typeDialogue("SKETCHBOOK", "Flipping through the red-and-black ink sketches of the Dream Stalker...");
+      } else if (action === "sketch-prev") {
+        sfxSelect();
+        sketchIdx = (sketchIdx - 1 + SKETCH_PAGES.length) % SKETCH_PAGES.length;
+        openSketchbookModal();
+      } else if (action === "sketch-next") {
+        sfxSelect();
+        sketchIdx = (sketchIdx + 1) % SKETCH_PAGES.length;
+        openSketchbookModal();
+      } else if (action === "close-lightbox") {
+        sfxSelect();
+        document.getElementById("lightboxBackdrop").classList.remove("open");
+      } else if (action === "close-lightbox-bg") {
+        if (e.target.id === "lightboxBackdrop") {
+          sfxSelect();
+          document.getElementById("lightboxBackdrop").classList.remove("open");
+        }
+      } else if (action === "inspect-feature") {
+        sfxSelect();
+        typeDialogue(`FEATURE // ${el.dataset.title.toUpperCase()}`, el.dataset.desc);
+      } else if (action === "teleport-dream") {
+        sfxStalkerDrone();
+        const map = el.dataset.map;
+        const title = el.dataset.title;
+        const lore = el.dataset.lore;
+        const body = document.getElementById("lightboxBody");
+        body.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #fff;padding-bottom:8px;margin-bottom:14px;">
+            <span style="font-weight:800;color:var(--headspace-cyan);">TELEPORTED TO // ${title.toUpperCase()}</span>
+            <button type="button" class="omori-btn" data-action="close-lightbox">CLOSE [X]</button>
+          </div>
+          <div style="border:2px dashed #fff;padding:18px;margin-bottom:14px;background:#08080c;">
+            <div style="font-size:0.74rem;color:var(--omori-red);font-weight:800;margin-bottom:6px;">
+              CONSOLE EXECUTED: /stalker dream ${map}
+            </div>
+            <h4 style="font-family:var(--font-marker);font-size:1.35rem;margin-bottom:8px;">${title}</h4>
+            <p style="font-size:0.88rem;line-height:1.5;color:#ddd;">${lore}</p>
+          </div>
+          <div style="display:flex;justify-content:flex-end;">
+            <button type="button" class="omori-btn red-cta" data-action="close-lightbox">RETURN TO WHITE SPACE</button>
+          </div>
+        `;
+        document.getElementById("lightboxBackdrop").classList.add("open");
+        typeDialogue(`DREAMSPACE // ${title.toUpperCase()}`, `Executed '/stalker dream ${map}' — ${lore}`);
+      } else if (action === "run-cmd") {
+        const cmd = el.dataset.cmd;
+        if (cmd === "summon") {
+          sfxStalkerDrone();
+          setSpaceMode("blackspace", true);
+          typeDialogue("CONSOLE // /stalker summon", "The Stalker has manifested 24 blocks behind you. Do not turn around too quickly.");
+        } else if (cmd === "fear95") {
+          sfxStalkerDrone();
+          updateFearLevel(95, true);
+        } else if (cmd === "dream") {
+          sfxSelect();
+          switchStage("dreamspaces");
+          typeDialogue("CONSOLE // /stalker dream", "Select one of the 3 Dreamspace Polaroids (mossy_rooms, motel_treats, lone_theatre) to teleport.");
+        } else if (cmd === "shift") {
+          sfxStalkerDrone();
+          const next = document.documentElement.getAttribute("data-space") === "whitespace" ? "blackspace" : "whitespace";
+          setSpaceMode(next, true);
+          typeDialogue("CONSOLE // /stalker shift", "Reality shifted! Illusion cycle triggered across the server.");
+        }
+      } else if (action === "toggle-audio") {
+        sfxSelect();
+        toggleDreamcoreBGM();
+        typeDialogue("DREAMCORE AUDIO", bgmPlaying ? "Playing 'assets/dreamcore.mp3' (Web Audio Liminal Synth active)..." : "Audio paused.");
+      } else if (action === "trigger-download") {
+        sfxSelect();
+        typeDialogue("DOWNLOAD MANAGER", "Starting download for 'dreamstalker-1.0.0.jar' (Fabric 1.21.8 • Java 21 • Kuru Studio)!");
+      } else if (action === "cycle-dialogue") {
+        sfxSelect();
+        const msg = LORE_TIPS[tipCount % LORE_TIPS.length];
+        tipCount++;
+        typeDialogue("DREAM STALKER // LORE", msg);
+      }
+    });
+
+    // Sliders
+    document.getElementById("fearRangeSlider").addEventListener("input", (e) => {
+      updateFearLevel(e.target.value, true);
+    });
+
+    document.getElementById("audioVolSlider").addEventListener("input", (e) => {
+      masterVolume = (parseInt(e.target.value, 10) || 0) / 100;
+      document.getElementById("volLabel").textContent = `${e.target.value}%`;
+    });
+  </script>
+</body>
+</html>
