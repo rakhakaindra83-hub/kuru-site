@@ -199,7 +199,83 @@ img.avatar{object-fit:cover}
   transform: scale(1.02);
   box-shadow: var(--glow);
 }
+
+#contact{position:relative;z-index:1;background:#0b2038;padding:40px 24px 90px;text-align:center}
+#contact-inner{max-width:612px;margin:auto}
+#contact p{color:var(--mut);line-height:1.6;margin-bottom:24px}
+#contact-form{display:grid;gap:10px;text-align:left}
+#contact-form input,#contact-form textarea{width:100%;padding:12px 14px;border:1px solid #355576;border-radius:9px;background:#071626;color:var(--ink);font:inherit}
+#contact-form textarea{min-height:140px;resize:vertical}
+#contact-form button{margin-top:8px;padding:12px;border:0;border-radius:9px;background:var(--acc);color:#071626;font:inherit;font-weight:700;cursor:pointer}
+#contact-form button:hover{background:var(--acc2)}
+#contact-form :focus-visible{outline:2px solid var(--acc2);outline-offset:3px}
+
+/* ---- mouse bubbles + glitter ---- */
+.mouse-bubble,.mouse-glitter{position:fixed;pointer-events:none;z-index:45;border-radius:50%;transform:translate(-50%,-50%);animation:mouse-pop .8s ease-out forwards}
+.mouse-bubble{width:var(--size);height:var(--size);border:1px solid rgba(143,208,255,.75);background:radial-gradient(circle,rgba(90,168,255,.28),rgba(90,168,255,0) 70%);box-shadow:0 0 16px rgba(90,168,255,.35)}
+.mouse-glitter{width:var(--size);height:var(--size);background:var(--color);box-shadow:0 0 9px var(--color)}
+@keyframes mouse-pop{0%{opacity:.9;transform:translate(-50%,-50%) scale(.3)}70%{opacity:.75}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.35)}}
+@media (prefers-reduced-motion:reduce){.mouse-bubble,.mouse-glitter{display:none}}
+
+.special-tabs{display:flex;gap:10px;margin-bottom:18px}
+.special-tab{flex:1;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--mut);font:inherit;font-weight:600;cursor:pointer;transition:.25s}
+.special-tab:hover,.special-tab.active{border-color:var(--acc);background:rgba(90,168,255,.12);color:var(--acc2);box-shadow:var(--glow)}
+.special-tab:focus-visible{outline:2px solid var(--acc2);outline-offset:3px}
+.special-panel[hidden]{display:none}
+.special-panel:not([hidden]){animation:specials-enter .35s ease-out both}
+@keyframes specials-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.special-panel:not([hidden]){animation:none}}
+.plugin-list{display:grid;gap:12px}
+.plugin-list a{display:block;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-decoration:none;transition:.25s}
+.plugin-list a:hover{border-color:var(--acc);color:var(--acc2);transform:translateX(4px);box-shadow:var(--glow)}
+
+.plugin-button{width:100%;display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);font:inherit;text-align:left;font-weight:600;cursor:pointer;transition:.25s}
+.plugin-button:hover{border-color:var(--acc);color:var(--acc2);transform:translateX(4px);box-shadow:var(--glow)}
+.plugin-button:focus-visible{outline:2px solid var(--acc2);outline-offset:3px}
+.plugin-icon{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;flex:none;border-radius:9px;font-family:"JetBrains Mono",monospace;font-size:.63rem;font-weight:700}
+.plugin-icon.shield{color:#8fd0ff;background:rgba(90,168,255,.16);border:1px solid #5aa8ff}
+.plugin-icon.terrain{color:#8fe3a1;background:rgba(62,180,92,.16);border:1px solid #3eb45c}
+.plugin-icon.impostor{color:#ff8e9e;background:rgba(220,55,75,.16);border:1px solid #dc374b}
+.plugin-icon.coin{font-family:system-ui;font-size:1.35rem;background:rgba(255,193,7,.14);border:1px solid #dcae25}
+.plugin-icon.compound{color:#fff;background:#b52235;border:1px solid #ff5368;border-radius:50%;font-size:.95rem;box-shadow:0 0 12px rgba(255,55,80,.3)}
+img.plugin-icon{image-rendering:pixelated;object-fit:contain;border-radius:0}
+
+#profile-stars:focus-visible{outline:2px solid var(--acc2);outline-offset:8px}
+.pixel-meteor{position:fixed;z-index:0;pointer-events:none;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 7px 2px #fff5ae,0 0 18px 5px #5aa8ff;animation:star-fall var(--duration) ease-out var(--delay) both}
+.pixel-meteor::after{content:"";position:absolute;left:3px;top:1px;width:var(--tail);height:2px;border-radius:999px;background:linear-gradient(90deg,#fff,#8fd0ff,transparent);filter:blur(1px);transform:rotate(var(--angle));transform-origin:left center}
+@keyframes star-fall{from{opacity:0;transform:translate(0,0)}12%{opacity:1}82%{opacity:1}to{opacity:0;transform:translate(-45vw,calc(100vh + 180px))}}
+@media(prefers-reduced-motion:reduce){.pixel-meteor{display:none}}
+
+/* ---- cursor background parallax ---- */
+#bg-video{transform:translate(var(--bg-x,0px),var(--bg-y,0px)) scale(1.08);transition:transform .45s ease-out;pointer-events:none}
+@media(prefers-reduced-motion:reduce){#bg-video{transform:none;transition:none}}
+
+.dc-activity{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 14px;border:1px solid rgba(90,168,255,.35);border-radius:12px;background:rgba(90,168,255,.06)}
+.dc-activity[hidden]{display:none}
+.dc-activity img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:rgba(90,168,255,.12)}
+.dc-activity small{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.dc-activity b{display:block;font-size:.88rem;color:var(--ink)}
+.dc-activity span{display:block;font-size:.78rem;color:var(--mut)}
+
+/* ---- commission closed ---- */
+.commission-status{text-align:center;padding:30px 20px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.commission-lock{display:block;width:64px;height:64px;margin:0 auto 22px}
+.commission-close{font-family:"Press Start 2P",monospace;font-size:clamp(.85rem,4vw,1.15rem);color:var(--acc2);letter-spacing:.12em;line-height:1.8}
+
+#commission-lock-button{display:block;margin:0 auto 22px;padding:8px;border:0;border-radius:8px;background:none;cursor:pointer}
+#commission-lock-button .commission-lock{margin:0}
+#commission-lock-button:focus-visible{outline:2px solid var(--acc2);outline-offset:4px}
+#commission-lock-button.shaking .commission-lock{animation:lock-rattle .4s ease-in-out}
+@keyframes lock-rattle{0%,100%{transform:translateX(0) rotate(0)}20%,60%{transform:translateX(-4px) rotate(-7deg)}40%,80%{transform:translateX(4px) rotate(7deg)}}
+
+.ocean-commission-link{position:relative;display:block;margin:42px 0 0;padding:22px 28px;border:1px solid #83e8e666;border-radius:24px;background:#082633;color:#dbfcf8;text-decoration:none;overflow:hidden;box-shadow:0 0 30px #4fcac218;transition:transform .35s,box-shadow .35s,border-color .35s}
+.ocean-commission-link:before{content:"";position:absolute;inset:-80%;background:radial-gradient(ellipse,#8ff0e622,transparent 60%);translate:-30% 0;transition:translate .7s;pointer-events:none}
+.ocean-commission-link:hover{transform:translateY(-4px);box-shadow:0 8px 40px #63ddd535;border-color:#8ff0e6}.ocean-commission-link:hover:before{translate:30% 0}
+.ocean-commission-link span{display:block;position:relative;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#91bebf}.ocean-commission-link strong{position:relative;display:flex;justify-content:space-between;align-items:center;margin-top:9px;font-size:24px;font-weight:500}.ocean-commission-link i{font-style:normal;color:#8ff0e6;transition:transform .35s}.ocean-commission-link:hover i{transform:translate(3px,-3px)}.dream-link{border-color:#e3dcd366;background:linear-gradient(90deg,#071626b3,#07162640),url('images/dreamstalker-meadow.jpg') center 56%/cover;min-height:160px;display:flex;flex-direction:column;justify-content:center;text-shadow:0 2px 8px #000}.dream-link:hover{border-color:#d99bad}.dream-link strong{color:#fff4ee}.dream-link span{color:#e5eeed}.dream-link:before{background:none}.ocean-commission-link:focus-visible{outline:2px solid #8ff0e6;outline-offset:5px}
+.ocean-transition{position:fixed;inset:0;z-index:100;pointer-events:none;background:radial-gradient(circle at var(--origin-x,50%) var(--origin-y,50%),#123f50,#020f1c 65%);clip-path:circle(0 at var(--origin-x,50%) var(--origin-y,50%));transition:clip-path .9s cubic-bezier(.22,1,.36,1)}.ocean-transition.active{clip-path:circle(150vmax at var(--origin-x,50%) var(--origin-y,50%))}.ocean-transition:after{content:"";position:absolute;left:50%;top:50%;width:90px;height:90px;border-radius:50%;border:1px solid #8ff0e677;box-shadow:0 0 55px #8ff0e633;animation:ocean-ring 1s ease-out forwards}@keyframes ocean-ring{from{transform:translate(-50%,-50%) scale(.4);opacity:1}to{transform:translate(-50%,-50%) scale(5);opacity:0}}@media(prefers-reduced-motion:reduce){.ocean-transition{display:none}.ocean-commission-link:hover{transform:none}}
+#ocean-commission-link{min-height:160px;padding-right:170px;background:linear-gradient(110deg,#06212d,#0b3f50)}#ocean-commission-link:after{content:'';position:absolute;right:36px;top:8px;width:130px;height:145px;background:url('images/jellyfish-commission.svg') center/contain no-repeat;pointer-events:none;animation:commission-jelly 5s ease-in-out infinite}#ocean-commission-link strong{gap:10px}@keyframes commission-jelly{50%{transform:translateY(-7px) rotate(3deg)}}@media(max-width:480px){#ocean-commission-link{padding-left:20px;padding-right:112px}#ocean-commission-link:after{right:10px;width:95px}#ocean-commission-link strong{font-size:21px}}@media(prefers-reduced-motion:reduce){#ocean-commission-link:after{animation:none}}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -211,7 +287,7 @@ img.avatar{object-fit:cover}
 
 <main>
   <!-- ponytail: ganti foto profil cukup tukar file kuru.gif di folder yang sama -->
-  <img class="avatar" src="kuru.gif" alt="foto profil kuru">
+  <button id="profile-stars" type="button" aria-label="Munculkan hujan bintang bercahaya" style="display:block;margin:0 auto;background:none;border:0;border-radius:50%;cursor:pointer"><img class="avatar" src="kuru.gif" alt="foto profil kuru"></button>
   <h1>kuru</h1>
   <div class="type-wrap"><span id="type"></span></div>
   <div class="chips">
@@ -241,12 +317,52 @@ img.avatar{object-fit:cover}
       <img id="dc-art" alt="cover lagu">
       <div><small>sedang dengar di Spotify</small><b id="dc-song"></b><span id="dc-artist"></span></div>
     </div>
+    <div class="dc-activity" id="dc-activity" hidden>
+      <img id="dc-activity-art" alt="ikon aktivitas">
+      <div><small>sedang bermain</small><b id="dc-activity-name"></b><span id="dc-activity-detail"></span></div>
+    </div>
   </section>
 
-  <section>
-      <h2>// Specials</h2>
-      <img src="Tak_berjudul208_20260925181612.png" alt="karya">
-    </section>
+  <section id="specials">
+    <h2>// Specials</h2>
+    <div class="special-tabs" role="tablist" aria-label="Specials">
+      <button class="special-tab active" type="button" role="tab" aria-selected="true" aria-controls="art-panel" data-panel="art-panel">Art</button>
+      <button class="special-tab" type="button" role="tab" aria-selected="false" aria-controls="dev-panel" data-panel="dev-panel">Development</button>
+    </div>
+    <div id="art-panel" class="special-panel" role="tabpanel">
+      <div class="gallery" style="display:block">
+        <img src="Tak_berjudul208_20260925181612.png" alt="karya" style="display:block;max-width:320px;height:auto;aspect-ratio:auto;margin:0 auto">
+      </div>
+    </div>
+    <div id="dev-panel" class="special-panel" role="tabpanel" hidden>
+      <div class="plugin-list">
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/jarnix-logo.png" alt="" style="object-fit:contain;image-rendering:auto"><span>Jarnix SMP</span></button>
+        <button type="button" class="plugin-button"><svg class="plugin-icon" viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges"><path fill="#303949" d="M5 2h6v1h2v2h1v8h-2v2H4v-2H2V5h1V3h2z"/><path fill="#bdcbd7" d="M5 3h6v1h1v2h1v6h-2v2H5v-2H3V6h1V4h1z"/><path fill="#edf4fc" d="M5 4h3v2H4V5h1z"/><path fill="#62778e" d="M9 4h2v2h1v6h-2v1H9z"/><path fill="#101826" d="M4 7h8v2H4zM6 10h1v3H6zM9 10h1v3H9z"/><path fill="#e5b957" d="M7 1h2v6H7z"/></svg><span>RISE SMP</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-trash.png" alt=""><span>anticlean-plugin</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-grass.png" alt=""><span>farlands-plugin</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-skull.png" alt=""><span>sussmp-plugin</span></button>
+        <button type="button" class="plugin-button"><span class="plugin-icon coin" aria-label="koin emas">🪙</span><span>LOYAL SMP</span></button>
+        <button type="button" class="plugin-button"><img class="plugin-icon" src="images/icon-senyawa.png" alt="" style="object-fit:cover"><span>Senyawa SMP S2</span></button>
+      </div>
+    </div>
+  </section>
+
+  <a id="ocean-commission-link" class="ocean-commission-link" href="https://rakhakaindra83-hub.github.io/kuru-ocean-studio/"><span>Art &amp; Development</span><strong>Commission <i aria-hidden="true">↗</i></strong></a>
+  <a id="dream-stalker-link" class="ocean-commission-link dream-link" href="https://rakhakaindra83-hub.github.io/dream-stalker-site/"><span>Fabric Mod · Dreamcore</span><strong>Dream Stalker <i aria-hidden="true">↗</i></strong></a>
+  <section id="commission" aria-labelledby="commission-title">
+    <h2 id="commission-title">// COMMISON</h2>
+    <div class="commission-status">
+      <button id="commission-lock-button" type="button" aria-label="Komisi ditutup: coba gembok">
+      <svg class="commission-lock" viewBox="0 0 16 16" aria-hidden="true" shape-rendering="crispEdges">
+        <path fill="#8fd0ff" d="M5 1h6v1h1v1h1v5h-2V4h-1V3H6v1H5v4H3V3h1V2h1z"/>
+        <path fill="#5aa8ff" d="M2 7h12v8H2z"/>
+        <path fill="#bfe5ff" d="M3 8h10v1H3z"/>
+        <path fill="#0b2038" d="M7 10h2v2H8v2H7z"/>
+      </svg>
+      </button>
+      <p class="commission-close">CLOSE</p>
+    </div>
+  </section>
 
   <section>
     <h2>// skills</h2>
@@ -272,13 +388,35 @@ img.avatar{object-fit:cover}
   </nav>
 
   <footer>© 2026 kuru — Anime Lover</footer>
+
 </main>
+
+<div id="contact" aria-labelledby="contact-title">
+  <div id="contact-inner">
+    <h2 id="contact-title">// contact</h2>
+    <p>Tulis pesan untuk rakhakaindra83@gmail.com. Gmail akan terbuka dengan pesan terisi; login ke akun Gmail kamu, lalu klik Kirim di Gmail.</p>
+    <form id="contact-form">
+      <label for="contact-name">Nama</label>
+      <input id="contact-name" name="name" autocomplete="name" maxlength="100" required>
+      <label for="contact-subject">Subjek</label>
+      <input id="contact-subject" name="subject" maxlength="200" required>
+      <label for="contact-message">Pesan</label>
+      <textarea id="contact-message" name="message" maxlength="5000" required></textarea>
+      <button type="submit">Lanjutkan ke Gmail</button>
+    </form>
+  </div>
+</div>
+
 
 <!-- ponytail: video bg dari bg.mp4 (muted loop); backsound bgm.m4a nyala setelah klik splash -->
 <audio id="bgm" src="bgm.m4a" loop preload="none"></audio>
 <div id="audio-pill" title="putar musik"><span class="eq"><b></b><b></b><b></b></span><span id="pill-label">I CAN'T STOP THE LONELINESS — klik utk play</span></div>
 
 <script>
+
+// Commission portal: a short ocean iris transition before native navigation.
+(()=>{const link=document.getElementById('ocean-commission-link');let leaving=false;link.addEventListener('click',e=>{if(e.ctrlKey||e.metaKey||e.shiftKey||e.altKey||matchMedia('(prefers-reduced-motion: reduce)').matches)return;e.preventDefault();if(leaving)return;leaving=true;try{window.__oceanAudio ||= new (window.AudioContext||window.webkitAudioContext)();const a=window.__oceanAudio;a.resume().catch(()=>{});const o=a.createOscillator(),g=a.createGain(),now=a.currentTime;o.type='sine';o.frequency.setValueAtTime(330,now);o.frequency.exponentialRampToValueAtTime(110,now+.65);g.gain.setValueAtTime(.06,now);g.gain.exponentialRampToValueAtTime(.0001,now+.7);o.connect(g);g.connect(a.destination);o.start(now);o.stop(now+.72);}catch(error){}const overlay=document.createElement('div');overlay.className='ocean-transition';overlay.setAttribute('aria-hidden','true');const rect=link.getBoundingClientRect();overlay.style.setProperty('--origin-x',(rect.left+rect.width/2)+'px');overlay.style.setProperty('--origin-y',(rect.top+rect.height/2)+'px');document.body.appendChild(overlay);let done=false;const go=()=>{if(done)return;done=true;location.assign(link.href);};overlay.addEventListener('transitionend',event=>{if(event.target===overlay&&event.propertyName==='clip-path')go();});requestAnimationFrame(()=>requestAnimationFrame(()=>overlay.classList.add('active')));setTimeout(go,1100);});})();
+
 // ---- splash: masuk + mulai musik (gesture pertama = boleh autoplay) ----
 const splash=document.getElementById('splash');
 splash.addEventListener('click',()=>{
@@ -334,6 +472,126 @@ for(let i=0;i<N;i++)P.push({
   if(!RM)requestAnimationFrame(draw);
 })();
 
+
+// ---- specials tabs ----
+document.querySelectorAll('.special-tab').forEach(tab=>tab.addEventListener('click',()=>{
+  if(!document.getElementById(tab.dataset.panel).hidden)return;
+  document.querySelectorAll('.special-tab').forEach(item=>{item.classList.toggle('active',item===tab);item.setAttribute('aria-selected',item===tab);});
+  document.querySelectorAll('.special-panel').forEach(panel=>{panel.hidden=panel.id!==tab.dataset.panel;});
+}));
+
+// ---- contact: Gmail sends from the visitor's own account ----
+document.getElementById('contact-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=new FormData(e.currentTarget);
+  const url=new URL('https://mail.google.com/mail/');
+  url.search=new URLSearchParams({view:'cm',fs:'1',to:'rakhakaindra83@gmail.com',su:f.get('subject'),body:'Nama: '+f.get('name')+'\n\n'+f.get('message')});
+  window.location.assign(url.href);
+});
+
+
+// ---- mouse interaction: bubbles and glitter ----
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  let last=0;
+  const colors=['#5aa8ff','#8fd0ff','#ffffff'];
+  function pop(x,y,click){
+    const el=document.createElement('i');
+    el.className=click?'mouse-bubble':'mouse-glitter';
+    const size=click?(Math.random()*18+18):(Math.random()*4+3);
+    el.style.cssText='left:'+x+'px;top:'+y+'px;--size:'+size+'px;--dx:'+(Math.random()*70-35)+'px;--dy:'+(Math.random()*70-45)+'px;--color:'+colors[Math.random()*colors.length|0];
+    document.body.appendChild(el);setTimeout(()=>el.remove(),850);
+  }
+  addEventListener('pointermove',e=>{const now=performance.now();if(now-last>55){last=now;pop(e.clientX,e.clientY,false);}});
+  addEventListener('pointerdown',e=>{pop(e.clientX,e.clientY,true);for(let i=0;i<5;i++)setTimeout(()=>pop(e.clientX+(Math.random()*30-15),e.clientY+(Math.random()*30-15),false),i*35);});
+})();
+
+// ---- button sounds: native Web Audio, no extra files ----
+(function(){
+  let audio;
+  function sound(click){
+    try{
+      audio ||= new (window.AudioContext || window.webkitAudioContext)();
+      if(audio.state!=='running')return;
+      const oscillator=audio.createOscillator(),gain=audio.createGain(),now=audio.currentTime;
+      oscillator.type='sine';oscillator.frequency.setValueAtTime(click?660:880,now);
+      oscillator.frequency.exponentialRampToValueAtTime(click?990:1100,now+.06);
+      gain.gain.setValueAtTime(.035,now);gain.gain.exponentialRampToValueAtTime(.001,now+.10);
+      oscillator.connect(gain);gain.connect(audio.destination);oscillator.start(now);oscillator.stop(now+.11);
+    }catch(error){/* Audio is optional; buttons still work. */}
+  }
+  // Browsers require a visitor gesture before hover audio is allowed.
+  document.addEventListener('pointerdown',()=>{
+    try{audio ||= new (window.AudioContext || window.webkitAudioContext)();audio.resume().catch(()=>{});}catch(error){}
+  },{capture:true});
+  document.querySelectorAll('button,.links a,.plugin-list a,#audio-pill').forEach(button=>{
+    button.addEventListener('pointerenter',()=>sound(false));
+    button.addEventListener('click',()=>sound(true));
+  });
+})();
+
+// ---- profile pixel meteor shower ----
+(function(){
+  let busy=false,audio;
+  document.getElementById('profile-stars').addEventListener('click',()=>{
+    if(busy||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    busy=true;setTimeout(()=>busy=false,5200);
+    for(let i=0;i<48;i++){
+      const star=document.createElement('i');star.className='pixel-meteor';star.setAttribute('aria-hidden','true');
+      star.style.setProperty("--angle",Math.atan2(-(innerHeight+180),innerWidth*.45)*180/Math.PI+"deg");
+      star.style.cssText+='--x:'+(Math.random()*150)+'vw;--y:'+(-10-Math.random()*35)+'vh;--tail:'+(20+Math.random()*35)+'px;--duration:'+(1.4+Math.random()*1.5)+'s;--delay:'+(Math.random()*1.8)+'s';
+      document.body.appendChild(star);setTimeout(()=>star.remove(),5200);
+    }
+    try{
+      audio ||= new (window.AudioContext||window.webkitAudioContext)();
+      audio.resume().then(()=>{
+        const now=audio.currentTime;
+        [1046,1318,1568,2093,1568,1318].forEach((frequency,i)=>{
+          const tone=audio.createOscillator(),gain=audio.createGain(),start=now+i*.12;
+          tone.type='sine';tone.frequency.setValueAtTime(frequency,start);
+          gain.gain.setValueAtTime(.035,start);gain.gain.exponentialRampToValueAtTime(.001,start+.25);
+          tone.connect(gain);gain.connect(audio.destination);tone.start(start);tone.stop(start+.26);
+        });
+      }).catch(()=>{});
+    }catch(error){/* Silent fallback: animation remains usable. */}
+  });
+})();
+
+// ---- cursor background parallax ----
+(function(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const bg=document.getElementById('bg-video');
+  function move(x,y){bg.style.setProperty('--bg-x',x+'px');bg.style.setProperty('--bg-y',y+'px');}
+  addEventListener('pointermove',e=>{
+    if(e.pointerType==='touch')return;
+    move(Math.max(-1,Math.min(1,e.clientX/innerWidth*2-1))*16,Math.max(-1,Math.min(1,e.clientY/innerHeight*2-1))*12);
+  },{passive:true});
+  document.documentElement.addEventListener('pointerleave',()=>move(0,0));
+})();
+
+// ---- closed commission lock feedback ----
+(function(){
+  const button=document.getElementById('commission-lock-button');let busy=false,audio;
+  button.addEventListener('click',()=>{
+    if(busy)return;
+    busy=true;button.classList.add('shaking');
+    setTimeout(()=>{button.classList.remove('shaking');busy=false;},450);
+    try{
+      audio ||= new (window.AudioContext||window.webkitAudioContext)();
+      audio.resume().then(()=>{
+        const now=audio.currentTime;
+        [0,.07,.16].forEach((delay,i)=>{
+          const tone=audio.createOscillator(),gain=audio.createGain(),start=now+delay;
+          tone.type='triangle';tone.frequency.setValueAtTime(i===1?1200:720,start);
+          tone.frequency.exponentialRampToValueAtTime(160,start+.045);
+          gain.gain.setValueAtTime(.05,start);gain.gain.exponentialRampToValueAtTime(.001,start+.06);
+          tone.connect(gain);gain.connect(audio.destination);tone.start(start);tone.stop(start+.065);
+        });
+      }).catch(()=>{});
+    }catch(error){/* Lock feedback still works without audio support. */}
+  });
+})();
+
 // ---- musik ----
 const bgm=document.getElementById('bgm'),pill=document.getElementById('audio-pill'),lbl=document.getElementById('pill-label');
 function tryPlay(){
@@ -355,7 +613,8 @@ document.querySelectorAll('.skill').forEach(el=>sk.observe(el));
   const ID='1358345285482319892';
   const $=id=>document.getElementById(id);
   const dot=$('dc-dot'),sub=$('dc-sub'),ava=$('dc-ava'),spot=$('dc-spot'),
-        art=$('dc-art'),song=$('dc-song'),artist=$('dc-artist');
+        art=$('dc-art'),song=$('dc-song'),artist=$('dc-artist'),activity=$('dc-activity'),
+        activityArt=$('dc-activity-art'),activityName=$('dc-activity-name'),activityDetail=$('dc-activity-detail');
   const ST={online:'#23a55a',idle:'#f0b232',dnd:'#f23f43',offline:'#80848e'};
   const TXT={online:'online-work',idle:'afk / idle',dnd:'jangan ganggu',offline:'offline'};
   let ws,hb;
@@ -375,6 +634,20 @@ document.querySelectorAll('.skill').forEach(el=>sk.observe(el));
       song.textContent=sp.details||'';
       artist.textContent=sp.state||'';
     }else spot.hidden=true;
+    const game=(p.activities||[]).find(a=>a.type===0 && a.name!=='Spotify');
+    if(game){
+      activity.hidden=false;
+      activityName.textContent=game.name||'Aktivitas Discord';
+      activityDetail.textContent=[game.details,game.state].filter(Boolean).join(' • ')||'sedang aktif';
+      const key=game.assets&&game.assets.large_image;
+      let image='';
+      if(key&&key.startsWith('mp:'))image='https://media.discordapp.net/'+key.slice(3);
+      else if(key&&key.startsWith('https://'))image=key;
+      else if(key&&game.application_id)image='https://cdn.discordapp.com/app-assets/'+encodeURIComponent(game.application_id)+'/'+encodeURIComponent(key)+'.png';
+      activityArt.hidden=!image;
+      if(image)activityArt.src=image;else activityArt.removeAttribute('src');
+      activityArt.onerror=()=>{activityArt.hidden=true;};
+    }else activity.hidden=true;
   }
   function conn(){
     clearInterval(hb);
